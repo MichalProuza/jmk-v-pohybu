@@ -194,7 +194,8 @@ const SHP={"segs":["oyphHug~bBAo@{CJo^}FwFGmC{@cGwEoBo@","wurhHc{~bB_EmAaAM}AHwB
 const MODES=[['tram','Tramvaje'],['trol','Trolejbusy'],['bus','Autobusy MHD'],['night','Noční autobusy'],['boat','Loď'],['reg','Regionální autobusy'],['train','Vlaky']];const NM=MODES.length,DRAW=[5,2,3,1,0,4,6];
 // decode trips
 const R=DATA.routes, ST=DATA.stops;
-const trips=DATA.trips.map(f=>{const n=(f.length-1)/2;const T=new Int32Array(n),S=new Int32Array(n);let t=f[1];T[0]=t;S[0]=f[2];
+// poslední záznam spoje bývá „odjezd“ z konečné (čas výjezdu na další spoj v oběhu); spoj končí už příjezdem na konečnou
+const trips=DATA.trips.map(f=>{let n=(f.length-1)/2;if(n>1&&f[2*n]===f[2*n-2])n--;const T=new Int32Array(n),S=new Int32Array(n);let t=f[1];T[0]=t;S[0]=f[2];
   for(let i=1;i<n;i++){t+=f[1+2*i];T[i]=t;S[i]=f[2+2*i];}return{m:R[f[0]][1],T,S,a:T[0],b:T[n-1]};});
 trips.sort((x,y)=>x.a-y.a);
 // activity per minute per mode
