@@ -183,7 +183,7 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
       <button data-s="2880" aria-pressed="false">Rychle</button>
     </div>
     <button id="reg">Celý kraj</button>
-    <button id="linesB" aria-pressed="false" title="Zobrazit síť linek">Síť linek</button>
+    <button id="linesB" aria-pressed="true" title="Zobrazit nebo skrýt síť linek">Síť linek</button>
   </div>
   <canvas id="scrub" tabindex="0" role="slider" aria-label="Čas dne" aria-valuemin="0" aria-valuemax="1440"></canvas>
   <div class="legend" id="leg"></div>
@@ -247,7 +247,7 @@ function drawNet(){net.width=map.width;net.height=map.height;nctx.setTransform(d
   netDirty=false;}
 // state
 let t=0, speed=960, playing=!matchMedia('(prefers-reduced-motion: reduce)').matches, on=[1,1,1,1,1,1,1], last=performance.now();
-let lines=false;const linesB=document.getElementById('linesB');
+let lines=true;const linesB=document.getElementById('linesB');
 function setLines(v){lines=v;linesB.setAttribute('aria-pressed',v);netDirty=true;setHash();}
 linesB.onclick=()=>setLines(!lines);
 function segAt(tr,tt){const T=tr.T;let lo=0,hi=T.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(T[m]<=tt)lo=m;else hi=m;}
@@ -384,7 +384,7 @@ q.addEventListener('keydown',e=>{if(sug.hidden)return;if(e.key==='ArrowDown'||e.
 sug.addEventListener('pointerdown',e=>{const li=e.target.closest('li[data-i]');if(li){e.preventDefault();pick(+li.dataset.i);}});
 q.addEventListener('blur',()=>setTimeout(()=>{sug.hidden=true;},150));
 // hash
-function setHash(){const h=[sel>=0?'obec='+encodeURIComponent(PL[sel][0]):'',home?'domu':'',typeof hist!=='undefined'&&hist?'1953':'',lines?'sit':''].filter(Boolean).join('&');try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
+function setHash(){const h=[sel>=0?'obec='+encodeURIComponent(PL[sel][0]):'',home?'domu':'',typeof hist!=='undefined'&&hist?'1953':'',lines?'':'bezsite'].filter(Boolean).join('&');try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
 // click on map selects nearest place
 let downAt=null;map.addEventListener('pointerdown',e=>{downAt=[e.clientX,e.clientY,performance.now()];});
 map.addEventListener('pointerup',e=>{if(!downAt)return;const[x0,y0,t0]=downAt;downAt=null;if(Math.hypot(e.clientX-x0,e.clientY-y0)>6||performance.now()-t0>500)return;
@@ -483,7 +483,7 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',readCss);
 new MutationObserver(readCss).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 addEventListener('resize',()=>{resize();if(hist){swX=Math.min(swX,W);placeSwipe();}});
 resize();fit();readCss();setPlayIcon();
-{const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/obec=([^&]+)/);if(/domu/.test(h))setHome(true);if(/1953/.test(h))setHist(true);if(/(^|&)sit($|&)/.test(h))setLines(true);
+{const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/obec=([^&]+)/);if(/domu/.test(h))setHome(true);if(/1953/.test(h))setHist(true);if(/(^|&)bezsite($|&)/.test(h))setLines(false);
  if(m){const i=PL.findIndex(p=>p[0]===m[1]);if(i>=0){q.value=PL[i][0];select(i);}}}
 if(document.fonts)document.fonts.ready.then(()=>netDirty=true);
 requestAnimationFrame(frame);

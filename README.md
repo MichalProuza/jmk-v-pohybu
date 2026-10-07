@@ -7,8 +7,8 @@ Celá stránka je jeden soubor `index.html` – data jízdních řádů i trasy 
 žádný build ani server není potřeba.
 
 Vozidla jedou po skutečných trasách linek (ulice, koleje), ne vzdušnou čarou.
-Síť linek je ve výchozím stavu skrytá, zapíná se tlačítkem **Síť linek** v dolní liště
-(stav se ukládá do adresy jako `#sit`).
+Síť linek je ve výchozím stavu zobrazená, vypíná a zapíná se tlačítkem **Síť linek** v dolní liště
+(vypnutý stav se ukládá do adresy jako `#bezsite`).
 
 ## Přepočet tras (`tools/build_shapes.py`)
 
