@@ -59,20 +59,6 @@ button:focus-visible,#scrub:focus-visible{outline:2px solid var(--bus);outline-o
 .legend .note{margin-left:auto;color:var(--ink-2);font-size:13px;align-self:center}
 
 .finder{position:fixed;left:20px;top:calc(128px + env(safe-area-inset-top,0px));display:flex;gap:8px;align-items:flex-start;z-index:5}
-.sbox{position:relative}
-#q{font:inherit;font-size:15px;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:9px 12px 9px 34px;width:250px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-#q::placeholder{color:var(--ink-2)}
-#q:focus{outline:2px solid var(--bus);outline-offset:1px}
-.sbox svg{z-index:1;position:absolute;left:11px;top:11px;width:16px;height:16px;stroke:var(--ink-2);fill:none;stroke-width:2;pointer-events:none}
-#sug{position:absolute;left:0;right:0;top:calc(100% + 4px);margin:0;padding:4px;list-style:none;background:var(--panel);border:1px solid var(--rule);border-radius:10px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-height:320px;overflow:auto}
-#sug[hidden]{display:none}
-#sug li{padding:7px 10px;border-radius:7px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-size:14px}
-#sug li small{color:var(--ink-2);font-variant-numeric:tabular-nums}
-#sug li[aria-selected="true"],#sug li:hover{background:var(--rule)}
-#homeB{background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:9px 12px;border-radius:10px;font-size:15px;white-space:nowrap}
-#homeB[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .histB[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 #histB{background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:9px 12px;border-radius:10px;font-size:15px;white-space:nowrap}
 #histB[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -95,16 +81,6 @@ body.hist-on .head{background:var(--panel);border-radius:12px;padding:10px 14px;
 body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.6)}
 .attr{position:fixed;left:8px;bottom:2px;font-size:10.5px;color:#fff;text-shadow:0 1px 2px #000;z-index:2;pointer-events:none;max-width:60%}
 .attr[hidden]{display:none}
-.homeleg{position:fixed;left:20px;top:calc(182px + env(safe-area-inset-top,0px));width:330px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:13px;line-height:1.45;color:var(--ink-2)}
-.homeleg[hidden]{display:none}
-.homeleg h3{margin:0 0 4px;font-size:15px;color:var(--ink);font-weight:600}
-.homeleg p{margin:0 0 8px}
-.homeleg .bins{display:flex;gap:2px;margin:6px 0 4px}
-.homeleg .bins span{flex:1;height:8px;border-radius:2px}
-.homeleg .bl{display:flex;gap:2px;font-size:10.5px;font-variant-numeric:tabular-nums}.homeleg .bl span{flex:1;text-align:center;white-space:nowrap}
-.homeleg .now{margin-top:8px;color:var(--ink)}
-.homeleg .now b{font-family:var(--cond);font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
 .card{position:fixed;right:20px;top:calc(150px + env(safe-area-inset-top,0px));width:330px;max-height:calc(100% - 340px);overflow:auto;background:var(--panel);
   border:1px solid var(--rule);border-radius:14px;padding:16px 18px 14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:6}
 .card[hidden]{display:none}
@@ -121,18 +97,12 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
 .facts dd small{font-family:var(--sans);font-size:13px;font-weight:400;color:var(--ink-2);margin-left:6px}
 @media (max-width:640px){
   .finder{left:12px;right:12px;top:calc(94px + env(safe-area-inset-top,0px))}
-  .sbox{flex:1}#q{width:100%;font-size:16px}
-  .homeleg{left:12px;right:12px;width:auto;top:calc(192px + env(safe-area-inset-top,0px));padding:9px 12px;font-size:12px}
-  .homeleg p{display:none}
   .histbar{left:12px;right:12px;max-width:none;top:calc(192px + env(safe-area-inset-top,0px));padding:8px 10px}.histbar p,.histbar h3{display:none}.histbar .chips{margin:0}
   body.hist-on .legend{display:none}
   .attr{bottom:auto;top:calc(282px + env(safe-area-inset-top,0px));font-size:9.5px;max-width:none;right:8px}
-  #histB,#homeB{padding:9px 10px;font-size:14px}
-  .finder{flex-wrap:wrap}.sbox{flex-basis:100%}
+  #histB{padding:9px 10px;font-size:14px}
   .card{left:8px;right:8px;width:auto;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));max-height:58%}
   body.card-open .dock{display:none}
-  body.home-on .legend{display:none}
-  .homeleg h3{font-size:14px}
 }
 @media (max-width:640px){
   .head{max-width:50vw;left:14px}.head h1{font-size:22px;white-space:normal}.head p{display:none}
@@ -148,10 +118,6 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
 <div class="head"><h1>Jižní Morava v pohybu</h1><p>Všechny spoje IDS JMK, tedy MHD Brno, regionální autobusy a vlaky, podle jízdního řádu na čtvrtek 8. října 2026.</p></div>
 <div class="clock"><div class="t" id="clk">00:00</div><div class="n"><b id="cnt">0</b> vozidel na trati</div></div>
 <div class="finder">
-  <div class="sbox"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-    <input id="q" type="search" placeholder="Najdi svou obec" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug" aria-label="Najdi svou obec">
-    <ul id="sug" role="listbox" hidden></ul></div>
-  <button id="homeB" aria-pressed="false">Poslední spoj domů</button>
   <button id="histB" aria-pressed="false">Brno v roce 1953</button>
 </div>
 <div class="histbar" id="histBar" hidden>
@@ -162,12 +128,6 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
 </div>
 <div class="swipe" id="swipe" hidden><span class="yl">1953</span><div class="knob">‹›</div><span class="yr">Dnes</span></div>
 <div class="attr" id="attr" hidden>Historická ortofotomapa (50. léta) © CENIA 2010, © GEODIS BRNO 2010; snímky VGHMÚř Dobruška, © MO ČR 2009 · Ortofoto ČR © ČÚZK · CC BY 4.0</div>
-<div class="homeleg" id="homeLeg" hidden>
-  <h3>Poslední spoj z centra Brna domů</h3>
-  <p>Odjezd z Hlavního nádraží nebo ÚAN Zvonařka, i s přestupy. Posuvníkem času nastav, kdy jsi v centru: obce, kam už nic nejede, zhasnou.</p>
-  <div class="bins" id="bins"></div><div class="bl" id="binl"></div>
-  <div class="now">V <b id="hT">0:00</b> se z centra ještě dostaneš do <b id="hN">0</b> z <span id="hM"></span> obcí</div>
-</div>
 <aside class="card" id="card" hidden aria-live="polite">
   <button class="x" id="cX" aria-label="Zavřít">×</button>
   <h2 id="cName"></h2><p class="sub" id="cSub"></p>
@@ -218,8 +178,8 @@ function ptAt(sh,d){const c=sh.c;let lo=0,hi=c.length-1;while(hi-lo>1){const m=(
 const map=document.getElementById('map'),ctx=map.getContext('2d');
 let W,H,dpr,view={cx:-0.002,cy:0.0,z:1};
 let region=false;function fit(){const isM=W<640;const dt=document.querySelector('.dock').getBoundingClientRect().top;
-  const hl=document.getElementById('homeLeg'),fd=document.querySelector('.finder');
-  const top=isM?((hl&&!hl.hidden)?hl.getBoundingClientRect().bottom:fd.getBoundingClientRect().bottom)+8:30,bot=dt-8;
+  const fd=document.querySelector('.finder');
+  const top=isM?fd.getBoundingClientRect().bottom+8:30,bot=dt-8;
   const [spanX,spanY,cx,cy]=region?[1.95*kx,0.95,(16.58-16.61)*kx,-(49.17-lat0)]:[0.30*kx,0.21,0.03,-0.012];
   view.z=Math.min(W/spanX,(bot-top)/spanY)*0.98;view.cx=cx;view.cy=cy-((top+bot)/2-H/2)/view.z;netDirty=true;}
 function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;map.width=W*dpr;map.height=H*dpr;
@@ -270,11 +230,11 @@ function frame(now){const dt=Math.min(.1,(now-last)/1000);last=now;
   if(netDirty)drawNet();
   ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,map.width,map.height);if(hist)drawHist();ctx.setTransform(1,0,0,1,0,0);if(lines)ctx.drawImage(net,0,0);else if(hist&&rightSrc==='m'){const sx=Math.round(Math.max(0,Math.min(W,swX))*dpr);if(sx<net.width)ctx.drawImage(net,sx,0,net.width-sx,net.height,sx,0,net.width-sx,net.height);}ctx.setTransform(dpr,0,0,dpr,0,0);
   cnts.fill(0);const r=Math.max(1.8,Math.min(5,view.z/1300)),tail=Math.min(150,speed*0.12);ctx.lineCap='round';
-  const B=MODES.map(()=>[]),BD=MODES.map(()=>[]);let dimAll=home&&sel<0;
+  const B=MODES.map(()=>[]),BD=MODES.map(()=>[]);
   for(let i=0;i<trips.length;i++){const tr=trips[i];if(tr.a>t)break;if(tr.b<t||!on[tr.m])continue;const p=posAt(tr,t);
-    if(dimAll||(sel>=0&&!hit[i])){BD[tr.m].push(px(p),py(p));continue;}
+    if(sel>=0&&!hit[i]){BD[tr.m].push(px(p),py(p));continue;}
     const pl=[];trail(tr,Math.max(tr.a,t-tail),t,pl);B[tr.m].push(pl);}
-  ctx.globalAlpha=home?.22:.16;for(const k of DRAW){const a=BD[k];if(!a.length)continue;ctx.fillStyle=css[MODES[k][0]];ctx.beginPath();
+  ctx.globalAlpha=.16;for(const k of DRAW){const a=BD[k];if(!a.length)continue;ctx.fillStyle=css[MODES[k][0]];ctx.beginPath();
     for(let i=0;i<a.length;i+=2){ctx.moveTo(a[i]+r*.8,a[i+1]);ctx.arc(a[i],a[i+1],r*.8,0,6.283);}ctx.fill();}ctx.globalAlpha=1;
   for(const k of DRAW){const a=B[k];if(!a.length)continue;const col=css[MODES[k][0]];ctx.strokeStyle=col;ctx.fillStyle=col;
     const rr=k===6?r*1.6:r;ctx.lineWidth=rr*1.1;ctx.lineJoin='round';ctx.globalAlpha=.35;ctx.beginPath();
@@ -282,12 +242,10 @@ function frame(now){const dt=Math.min(.1,(now-last)/1000);last=now;
     for(const pl of a){const x=pl[pl.length-2],y=pl[pl.length-1];ctx.moveTo(x+rr,y);ctx.arc(x,y,rr,0,6.283);}ctx.fill();
     if(k===6){ctx.lineWidth=1.2;ctx.strokeStyle=css['bg'];ctx.stroke();}cnts[k]=a.length;}
   for(let k=0;k<NM;k++)cnts[k]+=BD[k].length/2;
-  if(home)drawHome();
   if(sel>=0)drawSel();
   ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(lab,0,0);
   const hh=Math.floor(t/3600),mm=Math.floor(t%3600/60);clk.textContent=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');
   cnt.textContent=cnts.reduce((a,b)=>a+b,0);MODES.forEach((m,k)=>{legB[k].textContent=on[k]?cnts[k]:'–'});
-  if(home)updHome();
   drawScrub();scrub.setAttribute('aria-valuenow',Math.floor(t/60));scrub.setAttribute('aria-valuetext',clk.textContent);
   requestAnimationFrame(frame);}
 // scrubber: stacked activity curve
@@ -316,38 +274,22 @@ const leg=document.getElementById('leg'),legB=[];
 MODES.forEach(([k,n],i)=>{const b=document.createElement('button');b.setAttribute('aria-pressed','true');b.innerHTML=`<i style="background:var(--${k})"></i>${n} <b>0</b>`;
   b.onclick=()=>{on[i]^=1;b.setAttribute('aria-pressed',!!on[i]);};leg.appendChild(b);legB.push(b.querySelector('b'));});
 const note=document.createElement('span');note.className='note';note.textContent='Táhni mapu, kolečkem přibliž, klikni na zastávku. Polohy jsou dopočtené z jízdního řádu a vedené po trasách linek (síť IDS JMK, data.brno.cz).';leg.appendChild(note);
-// ===== places: search, card, last connection home
+// ===== places: card
 const PL=DATA.places,SP=DATA.stopPlace,NPL=PL.length;
 const PP=PL.map(p=>[(p[1]-16.61)*kx,-(p[2]-lat0)]);
-const BINS=[[19,'#C8312B'],[20,'#E3672E'],[21,'#EFA23B'],[22,'#E2C844'],[23,'#8CC56A'],[24,'#3AA88C'],[99,'#2F86C6']];
-const binOf=p=>{const b=PL[p][8];if(!b)return -1;const h=b[0]/3600;return BINS.findIndex(x=>h<x[0]);};
-const PB=PL.map((_,i)=>i?binOf(i):-1);
 const PORD=[...PL.keys()].slice(1).sort((x,y)=>PL[y][3]-PL[x][3]);netDirty=true;
-let sel=-1,home=false,hit=new Uint8Array(trips.length),selStops=[];
+let sel=-1,hit=new Uint8Array(trips.length),selStops=[];
 const fmt=s=>{let h=Math.floor(s/3600),m=Math.floor(s%3600/60);h%=24;return h+':'+String(m).padStart(2,'0');};
 const dur=s=>{const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?h+' h'+(m?' '+m+' min':''):m+' min';};
 const trn=n=>n===0?'přímý spoj':n===1?'1 přestup':n<5?n+' přestupy':n+' přestupů';
-function drawHome(){const rr=Math.max(3.6,Math.min(7,view.z/600));ctx.lineWidth=1.3;
-  for(let p=1;p<NPL;p++){const x=px(PP[p]),y=py(PP[p]);if(x<-10||y<-10||x>W+10||y>H+10)continue;const b=PL[p][8],k=PB[p];
-    ctx.beginPath();ctx.arc(x,y,rr,0,6.283);
-    if(b&&b[0]>=t){ctx.fillStyle=BINS[k][1];ctx.fill();ctx.strokeStyle=css['bg'];ctx.stroke();}
-    else{ctx.strokeStyle=css['ink-2'];ctx.globalAlpha=.45;ctx.stroke();ctx.globalAlpha=1;}}}
 function drawSel(){ctx.strokeStyle=css['ink'];ctx.lineWidth=1.5;ctx.beginPath();
   for(const i of selStops){const x=px(P[i]),y=py(P[i]);ctx.moveTo(x+5,y);ctx.arc(x,y,5,0,6.283);}ctx.stroke();}
-const hT=document.getElementById('hT'),hN=document.getElementById('hN');document.getElementById('hM').textContent=NPL-1;
-document.getElementById('bins').innerHTML=BINS.map(b=>`<span style="background:${b[1]}"></span>`).join('');
-document.getElementById('binl').innerHTML=['do 19','19–20','20–21','21–22','22–23','23–24','po půl.'].map(x=>`<span>${x}</span>`).join('');
-let lastHN=-1;function updHome(){hT.textContent=fmt(t);let n=0;for(let p=1;p<NPL;p++){const b=PL[p][8];if(b&&b[0]>=t)n++;}if(n!==lastHN){hN.textContent=n;lastHN=n;}}
-const homeB=document.getElementById('homeB'),homeLeg=document.getElementById('homeLeg');
-function setHome(v){if(v&&hist)setHist(false);home=v;homeB.setAttribute('aria-pressed',v);homeLeg.hidden=!v;document.body.classList.toggle('home-on',v);
-  if(v){if(!region){region=true;regB.textContent='Brno';}if(t<17*3600)t=17*3600;}if(sel<0)fit();setHash();}
-homeB.onclick=()=>setHome(!home);
 // card
 const card=document.getElementById('card');
 function select(p,zoom=true){sel=p;if(p<0){card.hidden=true;document.body.classList.remove('card-open');selStops=[];setHash();return;}
   hit=new Uint8Array(trips.length);selStops=[];for(let i=0;i<SP.length;i++)if(SP[i]===p)selStops.push(i);
   const ss=new Set(selStops);trips.forEach((tr,i)=>{for(const s of tr.S)if(ss.has(s)){hit[i]=1;break;}});
-  const [n,lo,la,nd,hist,lines,first,gap,lastH]=PL[p];
+  const [n,lo,la,nd,hist,lines,first,gap]=PL[p];
   document.getElementById('cName').textContent=n;
   const ln=lines.length>14?lines.slice(0,14).join(', ')+` a ${lines.length-14} dalších`:lines.join(', ');
   document.getElementById('cSub').textContent=`${nd} odjezdů za den · ${lines.length===1?'linka':'linky'} ${ln}`;
@@ -356,7 +298,6 @@ function select(p,zoom=true){sel=p;if(p<0){card.hidden=true;document.body.classL
   if(p===0)f+=`<div><dt>Odjezdů ze všech zastávek v Brně</dt><dd>${nd.toLocaleString('cs-CZ')}</dd></div>`;
   else{
     f+= first?`<div><dt>První ranní spojení do centra Brna</dt><dd>${fmt(first[0])} → ${fmt(first[1])}<small>${trn(first[2])}</small></dd></div>`:`<div><dt>První ranní spojení do centra Brna</dt><dd><small style="margin:0">nenalezeno</small></dd></div>`;
-    f+= lastH?`<div><dt>Poslední spojení z centra Brna domů</dt><dd>${fmt(lastH[0])} → ${fmt(lastH[1])}<small>${trn(lastH[2])}${lastH[0]>=86400?', v noci':''}</small></dd></div>`:`<div><dt>Poslední spojení z centra Brna domů</dt><dd><small style="margin:0">večer nenalezeno</small></dd></div>`;
     if(gap)f+=`<div><dt>Nejdelší pauza mezi odjezdy (5–22 h)</dt><dd>${dur(gap[1]-gap[0])}<small>${fmt(gap[0])}–${fmt(gap[1])}</small></dd></div>`;
   }
   document.getElementById('cFacts').innerHTML=f;card.hidden=false;document.body.classList.add('card-open');card.scrollTop=0;
@@ -366,33 +307,16 @@ function zoomTo(p){let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const i of selStops){co
   const isM=W<640,aw=isM?W-40:W-420,ah=isM?H*.38:H-330;
   let z=Math.min(aw/Math.max(1e-4,x1-x0),ah/Math.max(1e-4,y1-y0))*.8;z=Math.max(2600,Math.min(7000,z));view.z=z;
   view.cx=(x0+x1)/2+(isM?0:170/z);view.cy=(y0+y1)/2+(isM?H*.2/z:20/z);netDirty=true;}
-document.getElementById('cX').onclick=()=>{q.value='';select(-1);};
-addEventListener('keydown',e=>{if(e.key==='Escape'&&sel>=0&&document.activeElement!==q)select(-1);});
-// search
-const q=document.getElementById('q'),sug=document.getElementById('sug');
-const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-const NN=PL.map(p=>norm(p[0]));let items=[],act_=-1;
-function renderSug(){const v=norm(q.value.trim());if(!v){sug.hidden=true;q.setAttribute('aria-expanded','false');return;}
-  const a=[],b=[];for(let i=0;i<NPL;i++){if(NN[i].startsWith(v))a.push(i);else if(NN[i].includes(v))b.push(i);}
-  const by=(x,y)=>PL[y][3]-PL[x][3];items=[...a.sort(by),...b.sort(by)].slice(0,8);act_=items.length?0:-1;
-  sug.innerHTML=items.length?items.map((i,k)=>`<li role="option" id="o${k}" aria-selected="${k===act_}" data-i="${i}">${PL[i][0]}<small>${PL[i][3]} odj./den</small></li>`).join(''):'<li aria-disabled="true">Nic nenalezeno</li>';
-  sug.hidden=false;q.setAttribute('aria-expanded','true');}
-function pick(i){q.value=PL[i][0];sug.hidden=true;q.setAttribute('aria-expanded','false');q.blur();select(i);}
-q.addEventListener('input',renderSug);q.addEventListener('focus',renderSug);
-q.addEventListener('keydown',e=>{if(sug.hidden)return;if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!items.length)return;act_=(act_+(e.key==='ArrowDown'?1:items.length-1))%items.length;
-    [...sug.children].forEach((li,k)=>li.setAttribute('aria-selected',k===act_));q.setAttribute('aria-activedescendant','o'+act_);e.preventDefault();}
-  else if(e.key==='Enter'&&act_>=0){pick(items[act_]);e.preventDefault();}else if(e.key==='Escape'){sug.hidden=true;}});
-sug.addEventListener('pointerdown',e=>{const li=e.target.closest('li[data-i]');if(li){e.preventDefault();pick(+li.dataset.i);}});
-q.addEventListener('blur',()=>setTimeout(()=>{sug.hidden=true;},150));
+document.getElementById('cX').onclick=()=>select(-1);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&sel>=0)select(-1);});
 // hash
-function setHash(){const h=[sel>=0?'obec='+encodeURIComponent(PL[sel][0]):'',home?'domu':'',typeof hist!=='undefined'&&hist?'1953':'',lines?'':'bezsite'].filter(Boolean).join('&');try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
+function setHash(){const h=[sel>=0?'obec='+encodeURIComponent(PL[sel][0]):'',typeof hist!=='undefined'&&hist?'1953':'',lines?'':'bezsite'].filter(Boolean).join('&');try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
 // click on map selects nearest place
 let downAt=null;map.addEventListener('pointerdown',e=>{downAt=[e.clientX,e.clientY,performance.now()];});
 map.addEventListener('pointerup',e=>{if(!downAt)return;const[x0,y0,t0]=downAt;downAt=null;if(Math.hypot(e.clientX-x0,e.clientY-y0)>6||performance.now()-t0>500)return;
-  let best=-1,bd=home?16:12;
-  if(home){for(let p=1;p<NPL;p++){const d=Math.hypot(px(PP[p])-e.clientX,py(PP[p])-e.clientY);if(d<bd){bd=d;best=p;}}}
-  else{for(let i=0;i<P.length;i++){const d=Math.hypot(px(P[i])-e.clientX,py(P[i])-e.clientY);if(d<bd){bd=d;best=SP[i];}}}
-  if(best>=0){q.value=PL[best][0];select(best,false);}});
+  let best=-1,bd=12;
+  for(let i=0;i<P.length;i++){const d=Math.hypot(px(P[i])-e.clientX,py(P[i])-e.clientY);if(d<bd){bd=d;best=SP[i];}}
+  if(best>=0)select(best,false);});
 // ===== 1953: historical orthophoto (CENIA WMTS, S-JTSK) with swipe
 const KR=(()=>{const R=Math.PI/180,a=6377397.155,f=1/299.1528128,e2=2*f-f*f,e=Math.sqrt(e2),pc=49.5*R,lO=(24+50/60)*R,ac=30.28813975277778*R,pp=78.5*R,kp=.9999;
   const B=Math.sqrt(1+e2*Math.cos(pc)**4/(1-e2)),A=a*Math.sqrt(1-e2)/(1-e2*Math.sin(pc)**2),g0=Math.asin(Math.sin(pc)/B);
@@ -463,7 +387,7 @@ document.getElementById('chips').innerHTML=SPOTS.map((s,i)=>`<button data-i="${i
 document.getElementById('chips').onclick=e=>{const b=e.target.closest('button');if(!b)return;const s=SPOTS[+b.dataset.i];goTo(s[1],s[2],W<640?14000:16000);};
 function goTo(lo,la,z){view.z=z;view.cx=(lo-16.61)*kx;view.cy=-(la-lat0);netDirty=true;}
 function setHist(v){hist=v;document.body.classList.toggle('hist-on',v);histB.setAttribute('aria-pressed',v);histBar.hidden=!v;swipe.hidden=!v;attr.hidden=!v;
-  if(v){if(home)setHome(false);if(sel>=0)select(-1);region=false;regB.textContent='Celý kraj';swX=W/2;placeSwipe();goTo(16.6,49.205,W<640?6000:9000);if(t<6*3600)t=7*3600;}
+  if(v){if(sel>=0)select(-1);region=false;regB.textContent='Celý kraj';swX=W/2;placeSwipe();goTo(16.6,49.205,W<640?6000:9000);if(t<6*3600)t=7*3600;}
   else fit();setHash();}
 histB.onclick=()=>setHist(!hist);
 document.querySelectorAll('.rsrc button').forEach(b=>b.onclick=()=>{rightSrc=b.dataset.r;netDirty=true;document.querySelectorAll('.rsrc button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelector('.swipe .yr').textContent=rightSrc==='w'?'Dnes':'Dnes – mapa';});
@@ -484,8 +408,8 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',readCss);
 new MutationObserver(readCss).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 addEventListener('resize',()=>{resize();if(hist){swX=Math.min(swX,W);placeSwipe();}});
 resize();fit();readCss();setPlayIcon();
-{const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/obec=([^&]+)/);if(/domu/.test(h))setHome(true);if(/1953/.test(h))setHist(true);if(/(^|&)bezsite($|&)/.test(h))setLines(false);
- if(m){const i=PL.findIndex(p=>p[0]===m[1]);if(i>=0){q.value=PL[i][0];select(i);}}}
+{const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/obec=([^&]+)/);if(/1953/.test(h))setHist(true);if(/(^|&)bezsite($|&)/.test(h))setLines(false);
+ if(m){const i=PL.findIndex(p=>p[0]===m[1]);if(i>=0)select(i);}}
 if(document.fonts)document.fonts.ready.then(()=>netDirty=true);
 requestAnimationFrame(frame);
 </script>
