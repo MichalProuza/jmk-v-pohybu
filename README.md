@@ -52,6 +52,28 @@ python3 tools/build_shapes.py --html index.html --network ids_jmk_sit.geojson --
 Skript nepotřebuje žádné knihovny mimo standardní Python. Kde zastávka leží dál než 200 m
 od sítě nebo cesta nejde najít, zůstane mezi zastávkami rovná čára.
 
+## Tramvaje 1953 (`tools/build_tram1953.py`)
+
+V režimu **Brno v roce 1953** se přes letecké snímky kreslí tramvajová síť z roku 1953 (tlačítko
+**Tramvaje 1953**): bíle tratě, které jezdí dodnes, oranžově tratě později zrušené (Kobližná,
+Dornych, Olomoucká – Černovice, Stránská skála – Líšeň, Židenice, kasárna) a čárkovaně tratě
+postavené až po roce 1953. Data jsou v `index.html` jako řádek `const T53=...`.
+
+Vrstva vzniká z dnešní tramvajové sítě (data.brno.cz, transit_routes), ze které se vyříznou úseky
+otevřené po roce 1953, a z geometrií zrušených tratí. Obojí je v `tools/tram1953.json`:
+`remove` jsou dvojice bodů, mezi kterými se úsek vyřízne, `add` souřadnice zrušených tratí
+s rokem zrušení. Data zahájení a zrušení provozu jsou ze [Seznamu tramvajových tratí v Brně](https://cs.wikipedia.org/wiki/Seznam_tramvajov%C3%BDch_trat%C3%AD_v_Brn%C4%9B)
+(podle Z. Nesiba: *100 let elektrické pouliční dráhy v Brně 1900–2000*), geometrie zrušených
+tratí z OpenStreetMap (`railway=razed`/`abandoned`), obojí ověřené nad ortofotem z 50. let.
+Vedení spojky u černovického nádraží je přibližné.
+
+Denní aktualizace vrstvu nemění. Přepočítá se jen při změně tramvajové sítě nebo `tram1953.json`:
+
+```bash
+curl -o transit_routes.geojson "https://services6.arcgis.com/fUWVlHWZNxUvTUh8/arcgis/rest/services/transit_routes/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson"
+python3 tools/build_tram1953.py --html index.html --lines transit_routes.geojson --defs tools/tram1953.json
+```
+
 ## Publikace přes GitHub Pages
 
 1. Na GitHubu otevři **Settings → Pages**.
@@ -67,3 +89,4 @@ Soubor `.nojekyll` říká GitHubu, aby stránku jen zkopíroval a nespouštěl 
 - Trasy linek: „Trasy linek IDS JMK“ a „Linky městské hromadné dopravy“ (DPMB), data.brno.cz
 - Historická ortofotomapa (50. léta) © CENIA 2010, © GEODIS BRNO 2010; snímky VGHMÚř Dobruška, © MO ČR 2009
 - Ortofoto ČR © ČÚZK, CC BY 4.0
+- Tramvajová síť 1953: Seznam tramvajových tratí v Brně (Wikipedie, CC BY-SA), zrušené tratě © přispěvatelé OpenStreetMap (ODbL)
