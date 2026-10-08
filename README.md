@@ -10,6 +10,11 @@ Vozidla jedou po skutečných trasách linek (ulice, koleje), ne vzdušnou čaro
 Síť linek je ve výchozím stavu zobrazená, vypíná a zapíná se tlačítkem **Síť linek** v dolní liště
 (vypnutý stav se ukládá do adresy jako `#bezsite`).
 
+Tlačítko **Dlouhá expozice** přestane mazat stopy vozidel, takže za den z nich vznikne světelný obraz
+dopravy v kraji (v adrese `#expozice`). Obraz se kreslí od chvíle zapnutí, po posunu mapy nebo
+přetočení času zpět se překreslí celý. Tlačítko **Uložit obrázek** stáhne mapu jako PNG s popiskem
+(datum a časové rozpětí). V režimu Brno v roce 1953 uložení nejde, letecké snímky export neumožňují.
+
 ## Denní aktualizace jízdního řádu (`tools/update_day.sh`)
 
 Stránka zobrazuje jízdní řád na jeden konkrétní den (datum je v nadpisu a v `DATA.date`).
