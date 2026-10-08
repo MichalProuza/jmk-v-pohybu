@@ -543,9 +543,7 @@ document.getElementById('chips').innerHTML=SPOTS.map((s,i)=>`<button data-i="${i
 document.getElementById('chips').onclick=e=>{const b=e.target.closest('button');if(!b)return;const s=SPOTS[+b.dataset.i];goTo(s[1],s[2],W<640?14000:16000);};
 function goTo(lo,la,z){view.z=z;view.cx=(lo-16.61)*kx;view.cy=-(la-lat0);netDirty=true;}
 function setHist(v){hist=v;saveB.hidden=!expo||v;document.body.classList.toggle('hist-on',v);histB.setAttribute('aria-pressed',v);histBar.hidden=!v;swipe.hidden=!v;attr.hidden=!v;
-  if(v){if(sel>=0)select(-1,false);swX=W/2;placeSwipe();
-    // zachovat čas i výřez mapy; posunout jen když Brno není vůbec vidět
-    const b=lonlat2s(16.6,49.205);if(b[0]<0||b[0]>W||b[1]<0||b[1]>H){region=false;regB.textContent='Celý kraj';goTo(16.6,49.205,Math.max(view.z,W<640?6000:9000));}}
+  if(v){if(sel>=0)select(-1,false);swX=W/2;placeSwipe();}// čas i výřez mapy zůstávají beze změny
   netDirty=true;setHash();}
 histB.onclick=()=>setHist(!hist);
 document.querySelectorAll('.rsrc button').forEach(b=>b.onclick=()=>{rightSrc=b.dataset.r;netDirty=true;document.querySelectorAll('.rsrc button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelector('.swipe .yr').textContent=rightSrc==='w'?'Dnes':'Dnes – mapa';});
