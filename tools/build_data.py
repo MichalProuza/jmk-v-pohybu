@@ -22,6 +22,7 @@ Formát DATA (shodný s původní stránkou):
               poslední spojení z centra Brna domů [odj, příj, přestupy];
               časy ≥ 86400 jsou po půlnoci následujícího dne]
   stopPlace  index obce pro každou zastávku (Brno = 0)
+  stopNames  názvy zastávek (každý jednou), stopName index do stopNames pro každou zastávku
   labels     popisky mapy – přebírají se z předchozí verze stránky
 
 Skript nepotřebuje nic mimo standardní Python; běží asi 20 s.
@@ -257,6 +258,9 @@ def build(zf, day, old_labels):
     place_names = ['Brno'] + names
     place_idx = {n: i for i, n in enumerate(place_names)}
     stop_place = [place_idx[place_of(stops_raw[sid])] for sid in stop_ids]
+    stop_names = sorted({stops_raw[sid]['stop_name'] for sid in stop_ids})
+    sn_idx = {n: i for i, n in enumerate(stop_names)}
+    stop_name = [sn_idx[stops_raw[sid]['stop_name']] for sid in stop_ids]
     NP = len(place_names)
     psum = [[0.0, 0.0, 0] for _ in range(NP)]
     for si, p in enumerate(stop_place):
@@ -306,7 +310,8 @@ def build(zf, day, old_labels):
     log(f'obcí {NP}, bez ranního spojení {sum(1 for r in places[1:] if not r[6])}, '
         f'bez večerního {sum(1 for r in places[1:] if not r[8])} ({time.time()-t0:.0f}s)')
     return {'date': day.isoformat(), 'routes': routes, 'stops': stops, 'segs': segs,
-            'trips': trips, 'places': places, 'stopPlace': stop_place, 'labels': old_labels}
+            'trips': trips, 'places': places, 'stopPlace': stop_place,
+            'stopNames': stop_names, 'stopName': stop_name, 'labels': old_labels}
 
 
 def czech_date(d):

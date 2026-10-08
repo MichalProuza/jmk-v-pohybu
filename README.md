@@ -20,6 +20,14 @@ nejvíc vozidel naráz, nejklidnější chvíle noci, počet spojů a ujeté kil
 a nejrychlejší spoj, linka s nejvíc spoji a obec s nejvíc odjezdy. U většiny je odkaz
 „Ukázat na mapě“, který přetočí čas, přiblíží mapu nebo zvýrazní trasu spoje (v adrese `#rekordy`).
 
+Kliknutí na vozidlo otevře kartu spoje: linka, směr, projeté a další zastávky s časy. Tlačítko
+**Sledovat** přepne na pomalou rychlost a mapa vozidlo veze s sebou (posunem mapy se sledování
+vypne). Názvy zastávek jsou v `DATA.stopNames` / `DATA.stopName`.
+
+Tlačítko **Sdílet** (v liště i na kartě spoje) zkopíruje odkaz na aktuální okamžik: k běžným
+parametrům adresy přidá `cas=HH:MM`, `pohled=lon,lat,zoom` a u vybraného vozidla `spoj=linka@HH:MM`
+(odjezd z výchozí zastávky). Na mobilu se otevře systémové sdílení.
+
 ## Denní aktualizace jízdního řádu (`tools/update_day.sh`)
 
 Stránka zobrazuje jízdní řád na jeden konkrétní den (datum je v nadpisu a v `DATA.date`).
