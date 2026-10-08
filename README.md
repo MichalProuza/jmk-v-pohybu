@@ -15,6 +15,11 @@ dopravy v kraji (v adrese `#expozice`). Obraz se kreslí od chvíle zapnutí, po
 přetočení času zpět se překreslí celý. Tlačítko **Uložit obrázek** stáhne mapu jako PNG s popiskem
 (datum a časové rozpětí). V režimu Brno v roce 1953 uložení nejde, letecké snímky export neumožňují.
 
+Tlačítko **Rekordy dne** otevře kartu se zajímavostmi spočítanými z jízdního řádu daného dne:
+nejvíc vozidel naráz, nejklidnější chvíle noci, počet spojů a ujeté kilometry, nejdelší
+a nejrychlejší spoj, linka s nejvíc spoji a obec s nejvíc odjezdy. U většiny je odkaz
+„Ukázat na mapě“, který přetočí čas, přiblíží mapu nebo zvýrazní trasu spoje (v adrese `#rekordy`).
+
 ## Denní aktualizace jízdního řádu (`tools/update_day.sh`)
 
 Stránka zobrazuje jízdní řád na jeden konkrétní den (datum je v nadpisu a v `DATA.date`).
