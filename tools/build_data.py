@@ -38,6 +38,7 @@ DAY = 86400
 FIRST_FROM = 3 * 3600      # první ranní spojení: odjezd od 3:00
 LAST_FROM = 12 * 3600      # poslední spojení domů: odjezd z centra po poledni
 NIGHT_END = 3 * 3600       # ... nejpozději ve 3:00 následujícího rána, doma do 4:00
+EARLY_END = 4 * 3600       # doplnění nočních spojů v prvním dni feedu (viz build)
 GAP_FROM, GAP_TO = 5 * 3600, 22 * 3600
 
 
@@ -186,10 +187,24 @@ def build(zf, day, old_labels):
     cal, cal_dates = read_csv(zf, 'calendar.txt'), read_csv(zf, 'calendar_dates.txt')
     prev, nxt = day - datetime.timedelta(days=1), day + datetime.timedelta(days=1)
     svc = {d: active_services(cal, cal_dates, d) for d in (prev, day, nxt)}
+    # GTFS často začíná platit až dnešním dnem (nebo končí dneškem) – chybějící sousední den
+    # nahradíme stejným dnem v týdnu o týden dál/dřív, jinak by chyběly noční spoje po půlnoci
+    feed_starts = not svc[prev]
+    for d, step in ((prev, 7), (nxt, -7)):
+        if not svc[d]:
+            sub = d + datetime.timedelta(days=step)
+            svc[d] = active_services(cal, cal_dates, sub)
+            log(f'GTFS nepokrývá {d}, použit jízdní řád dne {sub} (služeb {len(svc[d])})')
+    # noční spoje po půlnoci mají v GTFS službu následujícího dne a v prvním dni feedu chybějí
+    # -> ranní spoje do EARLY_END doplníme ze služeb, které platí o týden později a dnes ne
+    early_svc = set()
+    if feed_starts:
+        early_svc = active_services(cal, cal_dates, day + datetime.timedelta(days=7)) - svc[day]
     routes_raw = {r['route_id']: r for r in read_csv(zf, 'routes.txt')}
     all_trips = read_csv(zf, 'trips.txt')
     by_day = {d: [t for t in all_trips if t['service_id'] in s] for d, s in svc.items()}
-    trip_ids = {t['trip_id'] for ts in by_day.values() for t in ts}
+    early = [t for t in all_trips if t['service_id'] in early_svc]
+    trip_ids = {t['trip_id'] for ts in (*by_day.values(), early) for t in ts}
     log(f'den {day}: služeb {len(svc[day])}, spojů {len(by_day[day])} '
         f'(předchozí den {len(by_day[prev])}, následující {len(by_day[nxt])}) ({time.time()-t0:.0f}s)')
 
@@ -234,6 +249,12 @@ def build(zf, day, old_labels):
         return out
 
     trips = encode(by_day[day])
+    if early:
+        have = {(f[0], f[1], f[2]) for f in trips}
+        add = [f for f in encode(early) if f[1] < EARLY_END and (f[0], f[1], f[2]) not in have]
+        trips += add
+        log(f'GTFS začíná dnešním dnem, doplněno {len(add)} nočních spojů do {EARLY_END // 3600}:00 '
+            f'z jízdního řádu o týden později')
     n_today = len(trips)
     # spoje z předchozí noci, které končí po půlnoci -> záporné časy
     for f in encode(by_day[prev]):

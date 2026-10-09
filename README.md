@@ -47,6 +47,9 @@ Skript stáhne GTFS IDS JMK (`https://kordis-jmk.cz/gtfs/gtfs.zip`, stejná data
   první ranní spojení do centra Brna (odjezd od 3:00), nejdelší pauzu mezi odjezdy (5–22 h)
   a poslední spojení z centra domů (odjezd z Hlavního nádraží nebo ÚAN Zvonařka po poledni,
   nejpozději ve 3:00 následujícího rána, s přestupy podle `transfers.txt`).
+  Když GTFS začíná platit až zadaným dnem (nový feed), chybí v něm předchozí den i noční spoje
+  po půlnoci, které IDS JMK vede pod službou následujícího dne. Skript je pak vezme z jízdního
+  řádu stejného dne v týdnu o týden později (předchozí noc a spoje dne do 4:00).
 - `tools/build_shapes.py` – přepočítá trasy mezi zastávkami (viz níže).
 
 Celý běh trvá asi půl minuty a nepotřebuje nic mimo standardní Python a `curl`.
