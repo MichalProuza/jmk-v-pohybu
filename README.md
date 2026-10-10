@@ -79,6 +79,8 @@ V režimu **Brno v roce 1953** se přes letecké snímky kreslí tramvajová sí
 **Tramvaje 1953**): bíle tratě, které jezdí dodnes, oranžově tratě později zrušené (Kobližná,
 Dornych, Olomoucká – Černovice, Stránská skála – Líšeň, Židenice, kasárna) a čárkovaně tratě
 postavené až po roce 1953. Data jsou v `index.html` jako řádek `const T53=...`.
+Na mobilu je panel režimu sbalený do záložky **Tramvaje a čtvrti ▾**, aby nezakrýval mapu;
+po klepnutí se rozbalí a po výběru čtvrti se zase sbalí.
 
 Vrstva vzniká z dnešní tramvajové sítě (data.brno.cz, transit_routes), ze které se vyříznou úseky
 otevřené po roce 1953, a z geometrií zrušených tratí. Obojí je v `tools/tram1953.json`:
