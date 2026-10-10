@@ -83,6 +83,7 @@ button:focus-visible,#scrub:focus-visible{outline:2px solid var(--bus);outline-o
 .histbar .t53 i{display:inline-block;width:16px;height:4px;border-radius:2px;vertical-align:middle;margin-right:4px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.45)}
 .histbar .t53 i.z{background:#FFB000;box-shadow:none}.histbar .t53 i.n{background:repeating-linear-gradient(90deg,var(--ink-2) 0 4px,transparent 4px 7px);box-shadow:none}
 .histbar .t53 .km{flex-basis:100%}
+.histbar .hbt{display:none}
 body.hist-on .head{background:var(--panel);border-radius:12px;padding:10px 14px;margin:-10px 0 0 -14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.6)}
 .attr{position:fixed;left:8px;bottom:2px;font-size:10.5px;color:#fff;text-shadow:0 1px 2px #000;z-index:2;pointer-events:none;max-width:60%}
@@ -116,6 +117,9 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
 @media (max-width:640px){
   .finder{left:12px;right:12px;top:calc(94px + env(safe-area-inset-top,0px))}
   .histbar{left:12px;right:12px;max-width:none;top:calc(192px + env(safe-area-inset-top,0px));padding:8px 10px}.histbar p,.histbar h3{display:none}.histbar .chips{margin:0}.histbar .t53{margin:0 0 6px}.histbar .t53 .km{display:none}
+  .histbar .hbt{display:block;font-size:13px;padding:4px 10px;border-radius:8px;margin:0 0 6px}
+  body.hb-min .histbar{right:auto;padding:0;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}body.hb-min .histbar>:not(.hbt){display:none}body.hb-min .histbar .hbt{margin:0;padding:8px 12px;font-size:14px;background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  body.hb-min .attr{top:calc(236px + env(safe-area-inset-top,0px))}
   body.hist-on .legend{display:none}
   .attr{bottom:auto;top:calc(358px + env(safe-area-inset-top,0px));font-size:9.5px;max-width:none;right:8px}
   #histB,#recB{padding:9px 10px;font-size:14px}
@@ -140,6 +144,7 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
   <button id="recB" aria-pressed="false" aria-controls="rec">Rekordy dne</button>
 </div>
 <div class="histbar" id="histBar" hidden>
+  <button class="hbt" id="hbT" aria-expanded="false" aria-controls="histBar">Tramvaje a čtvrti ▾</button>
   <h3>Brno v roce 1953 a dnes</h3>
   <p style="margin:0">Vlevo letecké snímky z let 1952–1954, vpravo dnešní. Táhni bílou čárou, dnešní vozidla jezdí přes obojí.</p>
   <div class="t53" role="group" aria-label="Tramvajová síť v roce 1953"><button id="t53B" aria-pressed="true">Tramvaje 1953</button><span><i></i>tratě 1953</span><span><i class="z"></i>dnes zrušené</span><span><i class="n"></i>postavené později</span><span class="km" id="t53km"></span></div>
@@ -540,7 +545,10 @@ swipe.addEventListener('pointerdown',e=>{swipe.setPointerCapture(e.pointerId);sw
 swipe.addEventListener('pointerup',()=>swipe.onpointermove=null);
 const SPOTS=[['Lesná',16.622,49.226],['Bohunice',16.578,49.172],['Starý Lískovec',16.556,49.168],['Líšeň',16.688,49.213],['Bystrc',16.515,49.222],['Vinohrady',16.66,49.205],['Centrum',16.608,49.196],['Královo Pole',16.598,49.226]];
 document.getElementById('chips').innerHTML=SPOTS.map((s,i)=>`<button data-i="${i}">${s[0]}</button>`).join('');
-document.getElementById('chips').onclick=e=>{const b=e.target.closest('button');if(!b)return;const s=SPOTS[+b.dataset.i];goTo(s[1],s[2],W<640?14000:16000);};
+document.getElementById('chips').onclick=e=>{const b=e.target.closest('button');if(!b)return;const s=SPOTS[+b.dataset.i];goTo(s[1],s[2],W<640?14000:16000);hbMin(true);};
+// mobil: panel 1953 složený do záložky, rozbalí se klepnutím
+const hbT=document.getElementById('hbT');function hbMin(v){v=v&&matchMedia('(max-width:640px)').matches;document.body.classList.toggle('hb-min',v);hbT.setAttribute('aria-expanded',!v);hbT.textContent=v?'Tramvaje a čtvrti ▾':'Skrýt ▴';}
+hbT.onclick=()=>hbMin(!document.body.classList.contains('hb-min'));hbMin(true);
 function goTo(lo,la,z){view.z=z;view.cx=(lo-16.61)*kx;view.cy=-(la-lat0);netDirty=true;}
 function setHist(v){hist=v;saveB.hidden=!expo||v;document.body.classList.toggle('hist-on',v);histB.setAttribute('aria-pressed',v);histBar.hidden=!v;swipe.hidden=!v;attr.hidden=!v;
   if(v){if(sel>=0)select(-1,false);swX=W/2;placeSwipe();}// čas i výřez mapy zůstávají beze změny
