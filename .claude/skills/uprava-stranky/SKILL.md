@@ -41,7 +41,7 @@ Nástroj Read používej jen s `offset`/`limit` mimo datové řádky. Edit fungu
   a `:root[data-theme="dark"]`) – novou barvu přidej do všech tří bloků. Mobil: `@media (max-width:640px)`.
 - **ř. 133–184** HTML: `.head` (nadpis + datum), `.clock`, `.finder` (Brno v roce 1953, Rekordy dne),
   `#histBar`, `#swipe`, karty `aside.card` (`#card` obec, `#veh` spoj, `#rec` rekordy), `.dock`
-  (play, rychlost, Celý kraj, Síť linek, Dlouhá expozice, Sdílet, Uložit obrázek, `#scrub` časová osa, `#leg` legenda).
+  (play, rychlost, Teď, Celý kraj, Síť linek, Dlouhá expozice, Sdílet, Uložit obrázek, `#scrub` časová osa, `#leg` legenda).
 - **ř. 185+** `<script>`, oddíly začínají komentářem `// =====`:
   - základ: `MODES` (7 módů: tram, trol, bus, night, boat, reg, train), dekódování `trips`
     (`T` časy, `S` zastávky, `a`/`b` začátek/konec, `m` mód, `r` linka), projekce `P`, `SHAPES`/`shapeOf`
@@ -49,7 +49,10 @@ Nástroj Read používej jen s `offset`/`limit` mimo datové řádky. Edit fungu
     `frame()` hlavní smyčka, `posAt/trail/segAt`, `css` (čte CSS proměnné přes `readCss()`)
   - Dlouhá expozice (`expo`, `expPaint`, `setExpo`), uložení PNG
   - časová osa `drawScrub`, play/rychlost, legenda
-  - `// ===== places: card` – karta obce (`select`, `showBox`, `zoomTo`)
+  - Teď: `pragueNow`, `setLive` (`live` = čas podle hodin, `speed=1`; ukončí ho pauza, posun času, volba rychlosti)
+  - `// ===== places: card` – karta obce (`select(p,zoom,st)`, `selStop` = kliknutá zastávka, `showBox`, `zoomTo`)
+  - `// ===== dojezd` – dojezd do hodiny: `isoBuild` (spoje podle odjezdu `CN`, pěší přesuny `FP`), `isoRun` (průchod spoji),
+    `drawIso` (vlastní plátno `isoC`, barvy `--iso0`…`--iso5`), `setIso`
   - `// ===== rekordy dne` – `buildRec`, `setRec`
   - `// ===== vozidlo` – `selVeh`, `renderVeh`, `setFollow`, `stopName`, `esc`
   - `// ===== sdílení` – `shareUrl`, `share`, `hashParts`, `setHash`
@@ -63,7 +66,7 @@ Nástroj Read používej jen s `offset`/`limit` mimo datové řádky. Edit fungu
 - **Přepínací tlačítko**: `<button id="xB" aria-pressed="false" title="…">` v `.dock .ctrls` nebo `.finder`,
   funkce `setX(v)` nastaví stav, `aria-pressed`, `netDirty=true` pokud se mění mapa, a zavolá `setHash()`.
 - **Adresa (hash)**: stav, který má přežít reload, přidej do `hashParts()` (`1953`, `bezsite`, `expozice`,
-  `rekordy`, `obec=`) a do čtení hashe na konci skriptu. Okamžik (`cas=`, `pohled=`, `spoj=`) je jen ve sdíleném odkazu.
+  `rekordy`, `obec=`, `dojezd`) a do čtení hashe na konci skriptu. Okamžik (`cas=`, `pohled=`, `spoj=`) je jen ve sdíleném odkazu.
 - **Karty**: najednou je otevřená jen jedna – při otevření zavři ostatní (`select(-1)`, `selVeh(-1)`, `setRec(false)`)
   a přepni `document.body.classList.toggle('card-open', …)` (na mobilu skryje dock).
 - **Mobil**: v JS `W<640`, v CSS `max-width:640px`. Každou změnu UI ověř i na mobilu.
