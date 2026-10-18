@@ -18,16 +18,19 @@
 :root{
   --bg:#E8ECEE; --net:#C3CCD2; --net-strong:#AEB9C1; --ink:#16232E; --ink-2:#55646F; --panel:rgba(248,250,251,.92); --rule:#D3DADF;
   --tram:#D7262E; --trol:#1E9447; --bus:#2273C7; --night:#C98A00; --boat:#0E9AAE; --reg:#A54BBF; --train:#1B2833; --label:#55646F;
+  --iso0:#4B1A8F; --iso1:#8E1F8F; --iso2:#C4306B; --iso3:#E05A33; --iso4:#E88A1A; --iso5:#C9A20E;
   --sans:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0E1821; --net:#22323F; --net-strong:#2D4152; --ink:#E6ECF0; --ink-2:#8C9CA8; --panel:rgba(14,24,33,.9); --rule:#24343F;
-  --tram:#FF4B4F; --trol:#3CD06E; --bus:#4AA3FF; --night:#FFC23D; --boat:#3FD8E8; --reg:#D886F0; --train:#F4F6F8; --label:#7F909C;}}
+  --tram:#FF4B4F; --trol:#3CD06E; --bus:#4AA3FF; --night:#FFC23D; --boat:#3FD8E8; --reg:#D886F0; --train:#F4F6F8; --label:#7F909C;
+  --iso0:#FFF07A; --iso1:#FFC94A; --iso2:#FF9142; --iso3:#F05A5A; --iso4:#D0468C; --iso5:#A04CC8;}}
 :root[data-theme="dark"]{
   --bg:#0E1821; --net:#22323F; --net-strong:#2D4152; --ink:#E6ECF0; --ink-2:#8C9CA8; --panel:rgba(14,24,33,.9); --rule:#24343F;
-  --tram:#FF4B4F; --trol:#3CD06E; --bus:#4AA3FF; --night:#FFC23D; --boat:#3FD8E8; --reg:#D886F0; --train:#F4F6F8; --label:#7F909C;}
+  --tram:#FF4B4F; --trol:#3CD06E; --bus:#4AA3FF; --night:#FFC23D; --boat:#3FD8E8; --reg:#D886F0; --train:#F4F6F8; --label:#7F909C;
+  --iso0:#FFF07A; --iso1:#FFC94A; --iso2:#FF9142; --iso3:#F05A5A; --iso4:#D0468C; --iso5:#A04CC8;}
 *,*::before,*::after{box-sizing:inherit}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-font-smoothing:antialiased}
@@ -49,7 +52,8 @@ button:hover{border-color:var(--ink-2)}
 button:focus-visible,#scrub:focus-visible{outline:2px solid var(--bus);outline-offset:2px}
 #play{width:44px;height:44px;border-radius:50%;padding:0;display:grid;place-items:center;background:var(--ink);color:var(--bg);border:none}
 #play svg{width:18px;height:18px;fill:currentColor}
-.spd button[aria-pressed="true"],#linesB[aria-pressed="true"],#expB[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.spd button[aria-pressed="true"],#linesB[aria-pressed="true"],#expB[aria-pressed="true"],#nowB[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#nowB[aria-pressed="true"]::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--tram);margin-right:6px;vertical-align:1px}
 #scrub{width:100%;height:64px;display:block;cursor:pointer;touch-action:none;border-radius:6px}
 .legend{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:4px 6px;font-size:14px}
 .legend button{display:flex;align-items:center;gap:7px;border-color:transparent;padding:4px 8px}
@@ -112,6 +116,11 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
 .stops li.next{font-weight:600}.stops li.next::after{background:var(--ink);border-color:var(--ink)}
 .stops li.more{color:var(--ink-2);font-size:12px}.stops li.more::after{display:none}
 .stops time{font-family:var(--cond);font-weight:600;font-variant-numeric:tabular-nums;min-width:38px}
+.iso{margin-top:12px;border-top:1px solid var(--rule);padding-top:10px}
+#isoB{font-size:13px;padding:5px 12px;border-radius:999px}#isoB[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.iso .sub{margin:8px 0 6px}.iramp{display:flex;gap:2px;margin:0 0 12px}
+.iramp span{flex:1;border-top:6px solid;padding-top:2px;font-size:11px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums}
+.card.iso-on .hist,.card.iso-on .hax,.card.iso-on #cFacts{display:none}.card.iso-on .iso{margin-top:0;border-top:0;padding-top:0}
 .facts .go{margin-top:6px;font-size:12px;padding:3px 9px;border-radius:999px}
 .facts dd small{font-family:var(--sans);font-size:13px;font-weight:400;color:var(--ink-2);margin-left:6px}
 @media (max-width:640px){
@@ -158,6 +167,7 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
   <h2 id="cName"></h2><p class="sub" id="cSub"></p>
   <div class="hist" id="cHist" aria-hidden="true"></div><div class="hax"><span>0</span><span>6</span><span>12</span><span>18</span><span>24 h</span></div>
   <dl class="facts" id="cFacts"></dl>
+  <div class="iso"><button id="isoB" aria-pressed="false">Kam se odsud dostanu za hodinu</button><div id="isoInfo"></div></div>
 </aside>
 <aside class="card" id="veh" hidden aria-live="polite">
   <button class="x" id="vX" aria-label="Zavřít">×</button>
@@ -178,6 +188,7 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
       <button data-s="960" aria-pressed="true">24 h za 90 s</button>
       <button data-s="2880" aria-pressed="false">Rychle</button>
     </div>
+    <button id="nowB" aria-pressed="false" title="Přetočit na aktuální čas a přehrávat naživo, reálným tempem">Teď</button>
     <button id="reg">Celý kraj</button>
     <button id="linesB" aria-pressed="true" title="Zobrazit nebo skrýt síť linek">Síť linek</button>
     <button id="expB" aria-pressed="false" title="Stopy vozidel se nemažou, za den z nich vznikne světelný obraz dopravy">Dlouhá expozice</button>
@@ -225,7 +236,7 @@ let region=false;function fit(){const isM=W<640;const dt=document.querySelector(
 function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;map.width=W*dpr;map.height=H*dpr;
   const c=scrub.getBoundingClientRect();scrub.width=c.width*dpr;scrub.height=c.height*dpr;netDirty=true;}
 const px=p=>W/2+(p[0]-view.cx)*view.z, py=p=>H/2+(p[1]-view.cy)*view.z;
-let css={};function readCss(){const s=getComputedStyle(document.documentElement);for(const k of['bg','net','net-strong','ink','ink-2','label','tram','trol','bus','night','boat','reg','train'])css[k]=s.getPropertyValue('--'+k).trim();netDirty=true;}
+let css={};function readCss(){const s=getComputedStyle(document.documentElement);for(const k of['bg','net','net-strong','ink','ink-2','label','tram','trol','bus','night','boat','reg','train','iso0','iso1','iso2','iso3','iso4','iso5'])css[k]=s.getPropertyValue('--'+k).trim();netDirty=true;}
 // network layer cached
 const net=document.createElement('canvas'),nctx=net.getContext('2d'),lab=document.createElement('canvas'),lctx=lab.getContext('2d');let netDirty=true;
 // netV: pohled, pro který jsou síť a popisky nakreslené; při sledování vozidla se jen posouvají (netDx/netDy)
@@ -294,16 +305,18 @@ saveB.onclick=()=>{const fh=Math.round(48*dpr),c=document.createElement('canvas'
   c.toBlob(b=>{if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`jmk-v-pohybu-${DATA.date}-${clk.textContent.replace(':','')}.png`;
     document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);},'image/png');};
 function frame(now){const dt=Math.min(.1,(now-last)/1000);last=now;
-  if(playing){t+=dt*speed;if(t>=86340){t=86340;playing=false;setPlayIcon();}}
+  if(live&&!playing)setLive(false);
+  if(playing){if(live)t=Math.min(86340,liveOff+now/1000);else t+=dt*speed;if(t>=86340){t=86340;playing=false;setPlayIcon();}}
   if(vTrip>=0)vehStep();
-  if(netDirty)drawNet();
-  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,map.width,map.height);if(hist)drawHist();ctx.setTransform(1,0,0,1,0,0);if(lines&&!expo)ctx.drawImage(net,netDx(),netDy());else if(hist&&rightSrc==='m'){const sx=Math.round(Math.max(0,Math.min(W,swX))*dpr);if(sx<net.width)ctx.drawImage(net,sx,0,net.width-sx,net.height,sx,0,net.width-sx,net.height);}if(hist&&t53&&T53D)ctx.drawImage(t53c,netDx(),netDy());if(expo){expStep(now);ctx.drawImage(expC,0,0);}ctx.setTransform(dpr,0,0,dpr,0,0);
+  if(iso)isoStep(now);
+  const nd=netDirty;if(netDirty)drawNet();if(iso&&(nd||isoDirty))drawIso();
+  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,map.width,map.height);if(hist)drawHist();ctx.setTransform(1,0,0,1,0,0);if(lines&&!expo)ctx.drawImage(net,netDx(),netDy());else if(hist&&rightSrc==='m'){const sx=Math.round(Math.max(0,Math.min(W,swX))*dpr);if(sx<net.width)ctx.drawImage(net,sx,0,net.width-sx,net.height,sx,0,net.width-sx,net.height);}if(hist&&t53&&T53D)ctx.drawImage(t53c,netDx(),netDy());if(iso)ctx.drawImage(isoC,netDx(),netDy());if(expo){expStep(now);ctx.drawImage(expC,0,0);}ctx.setTransform(dpr,0,0,dpr,0,0);
   for(const i of[recTrip,vTrip]){if(i<0)continue;const pl=[],tr=trips[i];trail(tr,tr.a,tr.b,pl);ctx.strokeStyle=css['ink'];ctx.globalAlpha=.5;ctx.lineWidth=4;ctx.lineCap='round';ctx.lineJoin='round';
     ctx.beginPath();ctx.moveTo(pl[0],pl[1]);for(let i=2;i<pl.length;i+=2)ctx.lineTo(pl[i],pl[i+1]);ctx.stroke();ctx.globalAlpha=1;}
-  cnts.fill(0);const r=Math.max(1.8,Math.min(5,view.z/1300)),tail=Math.min(150,speed*0.12);ctx.lineCap='round';
+  cnts.fill(0);const r=Math.max(1.8,Math.min(5,view.z/1300)),tail=live?30:Math.min(150,speed*0.12);ctx.lineCap='round';
   const B=MODES.map(()=>[]),BD=MODES.map(()=>[]);
   for(let i=0;i<trips.length;i++){const tr=trips[i];if(tr.a>t)break;if(tr.b<t||!on[tr.m])continue;const p=posAt(tr,t);
-    if(sel>=0&&!hit[i]){BD[tr.m].push(px(p),py(p));continue;}
+    if(iso||sel>=0&&!hit[i]){BD[tr.m].push(px(p),py(p));continue;}
     const pl=[];trail(tr,Math.max(tr.a,t-tail),t,pl);B[tr.m].push(pl);}
   ctx.globalAlpha=.16;for(const k of DRAW){const a=BD[k];if(!a.length)continue;ctx.fillStyle=css[MODES[k][0]];ctx.beginPath();
     for(let i=0;i<a.length;i+=2){ctx.moveTo(a[i]+r*.8,a[i+1]);ctx.arc(a[i],a[i+1],r*.8,0,6.283);}ctx.fill();}ctx.globalAlpha=1;
@@ -331,17 +344,26 @@ function drawScrub(){const w=scrub.width/dpr,h=scrub.height/dpr,top=4,bot=h-14;s
   sctx.globalAlpha=1;sctx.fillStyle=css['ink-2'];sctx.font='500 11px '+getComputedStyle(document.body).fontFamily;sctx.textAlign='center';
   const st=w<500?6:3;for(let hh=0;hh<=24;hh+=st){const x=hh/24*w;sctx.textAlign=hh===0?'left':hh===24?'right':'center';sctx.fillText(hh+':00',x,h-1);}
   const x=t/86400*w;sctx.fillStyle=css['ink'];sctx.fillRect(x-1,0,2,bot+2);sctx.beginPath();sctx.arc(x,2,4,0,6.283);sctx.fill();}
-function seek(e){const r=scrub.getBoundingClientRect();t=Math.max(0,Math.min(86340,(e.clientX-r.left)/r.width*86400));}
+function seek(e){setLive(false);const r=scrub.getBoundingClientRect();t=Math.max(0,Math.min(86340,(e.clientX-r.left)/r.width*86400));}
 scrub.addEventListener('pointerdown',e=>{scrub.setPointerCapture(e.pointerId);seek(e);scrub.onpointermove=seek;});
 scrub.addEventListener('pointerup',()=>scrub.onpointermove=null);
-scrub.addEventListener('keydown',e=>{if(e.key==='ArrowRight')t=Math.min(86340,t+600);else if(e.key==='ArrowLeft')t=Math.max(0,t-600);else if(e.key===' '){togglePlay();}else return;e.preventDefault();});
+scrub.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft')setLive(false);if(e.key==='ArrowRight')t=Math.min(86340,t+600);else if(e.key==='ArrowLeft')t=Math.max(0,t-600);else if(e.key===' '){togglePlay();}else return;e.preventDefault();});
 // controls
 const play=document.getElementById('play'),ico=document.getElementById('ico');
 function setPlayIcon(){ico.innerHTML=playing?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M7 4l14 8-14 8z"/>';play.setAttribute('aria-label',playing?'Pozastavit':'Spustit');}
 function togglePlay(){if(!playing&&t>=86340)t=0;playing=!playing;setPlayIcon();}
 play.onclick=togglePlay;
 const regB=document.getElementById('reg');regB.onclick=()=>{region=!region;regB.textContent=region?'Brno':'Celý kraj';fit();};
-document.querySelectorAll('.spd button').forEach(b=>b.onclick=()=>{speed=+b.dataset.s;document.querySelectorAll('.spd button').forEach(x=>x.setAttribute('aria-pressed',x===b));});
+document.querySelectorAll('.spd button').forEach(b=>b.onclick=()=>{setLive(false);speed=+b.dataset.s;document.querySelectorAll('.spd button').forEach(x=>x.setAttribute('aria-pressed',x===b));});
+// Teď: aktuální čas v Praze; naživo jede reálným tempem a čas se drží podle hodin (přerušení pauzou, posunem času nebo volbou rychlosti)
+const nowB=document.getElementById('nowB'),pragueFmt=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Prague',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+function pragueNow(){const p={};for(const x of pragueFmt.formatToParts(new Date()))p[x.type]=x.value;return{d:`${p.year}-${p.month}-${p.day}`,s:p.hour*3600+p.minute*60+ +p.second};}
+let live=false,liveOff=0;
+function setLive(v){if(!v&&!live)return;live=v;nowB.setAttribute('aria-pressed',v);
+  if(!v){speed=960;document.querySelectorAll('.spd button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.s==='960'));return;}
+  const n=pragueNow();liveOff=n.s-performance.now()/1000;t=Math.min(86340,n.s);speed=1;document.querySelectorAll('.spd button').forEach(x=>x.setAttribute('aria-pressed',false));
+  if(!playing){playing=true;setPlayIcon();}}
+nowB.onclick=()=>setLive(true);
 const leg=document.getElementById('leg'),legB=[];
 MODES.forEach(([k,n],i)=>{const b=document.createElement('button');b.setAttribute('aria-pressed','true');b.innerHTML=`<i style="background:var(--${k})"></i>${n} <b>0</b>`;
   b.onclick=()=>{on[i]^=1;b.setAttribute('aria-pressed',!!on[i]);};leg.appendChild(b);legB.push(b.querySelector('b'));});
@@ -350,15 +372,15 @@ const note=document.createElement('span');note.className='note';note.textContent
 const PL=DATA.places,SP=DATA.stopPlace,NPL=PL.length;
 const PP=PL.map(p=>[(p[1]-16.61)*kx,-(p[2]-lat0)]);
 const PORD=[...PL.keys()].slice(1).sort((x,y)=>PL[y][3]-PL[x][3]);netDirty=true;
-let sel=-1,hit=new Uint8Array(trips.length),selStops=[];
+let sel=-1,selStop=-1,hit=new Uint8Array(trips.length),selStops=[];
 const fmt=s=>{let h=Math.floor(s/3600),m=Math.floor(s%3600/60);h%=24;return h+':'+String(m).padStart(2,'0');};
 const dur=s=>{const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?h+' h'+(m?' '+m+' min':''):m+' min';};
 const trn=n=>n===0?'přímý spoj':n===1?'1 přestup':n<5?n+' přestupy':n+' přestupů';
 function drawSel(){ctx.strokeStyle=css['ink'];ctx.lineWidth=1.5;ctx.beginPath();
-  for(const i of selStops){const x=px(P[i]),y=py(P[i]);ctx.moveTo(x+5,y);ctx.arc(x,y,5,0,6.283);}ctx.stroke();}
+  for(const i of iso?isoOrig:selStops){const x=px(P[i]),y=py(P[i]);ctx.moveTo(x+5,y);ctx.arc(x,y,5,0,6.283);}ctx.stroke();}
 // card
 const card=document.getElementById('card');
-function select(p,zoom=true){if(p>=0&&!rec.hidden)setRec(false);if(p>=0&&vTrip>=0)selVeh(-1);sel=p;if(p<0){card.hidden=true;document.body.classList.remove('card-open');selStops=[];setHash();return;}
+function select(p,zoom=true,st=-1){if(p>=0&&!rec.hidden)setRec(false);if(p>=0&&vTrip>=0)selVeh(-1);sel=p;selStop=st;if(p<0){card.hidden=true;document.body.classList.remove('card-open');selStops=[];setIso(false);return;}
   hit=new Uint8Array(trips.length);selStops=[];for(let i=0;i<SP.length;i++)if(SP[i]===p)selStops.push(i);
   const ss=new Set(selStops);trips.forEach((tr,i)=>{for(const s of tr.S)if(ss.has(s)){hit[i]=1;break;}});
   const [n,lo,la,nd,hist,lines,first,gap]=PL[p];
@@ -373,7 +395,7 @@ function select(p,zoom=true){if(p>=0&&!rec.hidden)setRec(false);if(p>=0&&vTrip>=
     if(gap)f+=`<div><dt>Nejdelší pauza mezi odjezdy (5–22 h)</dt><dd>${dur(gap[1]-gap[0])}<small>${fmt(gap[0])}–${fmt(gap[1])}</small></dd></div>`;
   }
   document.getElementById('cFacts').innerHTML=f;card.hidden=false;document.body.classList.add('card-open');card.scrollTop=0;
-  if(zoom)zoomTo(p);setHash();}
+  if(zoom)zoomTo(p);if(iso)setIso(true,false);else setHash();}
 function zoomTo(p){if(p===0){region=false;regB.textContent='Celý kraj';fit();return;}showBox(selStops.map(i=>P[i]),2600);}
 // přiblížit mapu na body (projekce P), s místem pro kartu vpravo (na mobilu dole)
 function showBox(pts,zmin){let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const[a,b]of pts){x0=Math.min(x0,a);x1=Math.max(x1,a);y0=Math.min(y0,b);y1=Math.max(y1,b);}
@@ -382,6 +404,68 @@ function showBox(pts,zmin){let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const[a,b]of pt
   view.cx=(x0+x1)/2+(isM?0:170/z);view.cy=(y0+y1)/2+(isM?H*.2/z:20/z);netDirty=true;}
 document.getElementById('cX').onclick=()=>select(-1);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&sel>=0)select(-1);else if(e.key==='Escape'&&!rec.hidden)setRec(false);else if(e.key==='Escape'&&vTrip>=0)selVeh(-1);});
+// ===== dojezd: kam se z obce nebo zastávky dostanu do hodiny od času na mapě (nejdřívější příjezd, průchod spoji podle odjezdu)
+// přestup na téže zastávce 1 min, pěšky k zastávkám do 400 m (vzdušnou čarou ×1,3, 4,5 km/h, +1 min)
+const ISO_H=3600,isoC=document.createElement('canvas'),ictx=isoC.getContext('2d'),isoB=document.getElementById('isoB'),isoInfo=document.getElementById('isoInfo');
+let iso=false,isoOrig=[],isoMin=-1,isoT0=0,isoAt=0,isoRev=1,isoDirty=false,CN=null,FP=null,iAv=null,iPc=null,isoStat='';
+function isoBuild(){let n=0;for(const tr of trips)n+=tr.S.length-1;
+  const D=new Int32Array(n),Rt=new Int32Array(n),Ix=new Int32Array(n);let k=0,lo=1e9,hi=-1e9;
+  trips.forEach((tr,j)=>{for(let i=0;i+1<tr.S.length;i++){D[k]=tr.T[i];Rt[k]=j;Ix[k]=i;lo=Math.min(lo,D[k]);hi=Math.max(hi,D[k]);k++;}});
+  // spoje seřazené podle odjezdu (counting sort po sekundách)
+  const cnt=new Int32Array(hi-lo+2);for(let i=0;i<n;i++)cnt[D[i]-lo+1]++;for(let i=1;i<cnt.length;i++)cnt[i]+=cnt[i-1];
+  CN={n,d:new Int32Array(n),a:new Int32Array(n),f:new Int32Array(n),t:new Int32Array(n),r:new Int32Array(n)};
+  for(let i=0;i<n;i++){const j=cnt[D[i]-lo]++,tr=trips[Rt[i]],x=Ix[i];CN.d[j]=D[i];CN.a[j]=tr.T[x+1];CN.f[j]=tr.S[x];CN.t[j]=tr.S[x+1];CN.r[j]=Rt[i];}
+  // pěší přesuny mezi zastávkami do 400 m (mřížka ~550 m)
+  const g=new Map(),cs=.005,N=P.length;P.forEach((p,i)=>{const q=Math.floor(p[0]/cs)*100003+Math.floor(p[1]/cs);let a=g.get(q);if(!a)g.set(q,a=[]);a.push(i);});
+  const s=new Int32Array(N+1),ft=[],fw=[];
+  for(let i=0;i<N;i++){const gx=Math.floor(P[i][0]/cs),gy=Math.floor(P[i][1]/cs);
+    for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){const a=g.get((gx+dx)*100003+gy+dy);if(a)for(const j of a){if(j===i)continue;
+      const d=Math.hypot(P[j][0]-P[i][0],P[j][1]-P[i][1])*111200;if(d<=400){ft.push(j);fw.push(60+Math.round(d*1.3/1.25));}}}
+    s[i+1]=ft.length;}
+  FP={s,t:Int32Array.from(ft),w:Int32Array.from(fw)};iAv=new Int32Array(N);iPc=new Int32Array(N);}
+// av = příjezd vozidlem (kreslí se strom spojů pc), ar = nejdřív i pěšky, rd = kdy lze nastoupit
+function isoRun(t0){const N=P.length,end=t0+ISO_H,av=iAv,pc=iPc,ar=new Int32Array(N).fill(1e9),rd=new Int32Array(N).fill(1e9),ok=new Uint8Array(trips.length);av.fill(1e9);pc.fill(-1);
+  for(const s of isoOrig){ar[s]=rd[s]=t0;}
+  for(const s of isoOrig)for(let k=FP.s[s];k<FP.s[s+1];k++){const j=FP.t[k],b=t0+FP.w[k];if(b<ar[j])ar[j]=b;if(b<rd[j])rd[j]=b;}
+  let lo=0,hi=CN.n;while(lo<hi){const m=(lo+hi)>>1;if(CN.d[m]<t0)lo=m+1;else hi=m;}
+  for(let i=lo;i<CN.n&&CN.d[i]<=end;i++){const r=CN.r[i];if(!ok[r]){if(rd[CN.f[i]]>CN.d[i])continue;ok[r]=1;}
+    const s=CN.t[i],a=CN.a[i];if(a>end||a>=av[s])continue;av[s]=a;pc[s]=i;if(a<ar[s])ar[s]=a;if(a+60<rd[s])rd[s]=a+60;
+    for(let k=FP.s[s];k<FP.s[s+1];k++){const j=FP.t[k],b=a+FP.w[k];if(b<=end&&b<ar[j])ar[j]=b;if(b<rd[j])rd[j]=b;}}
+  isoT0=t0;isoDirty=true;
+  // souhrn do karty: obce a zastávky do 30 min a do hodiny, nejvzdálenější obec
+  const o=[0,0].map(()=>[new Set(),new Set()]);let ox=0,oy=0;for(const s of isoOrig){ox+=P[s][0];oy+=P[s][1];}ox/=isoOrig.length;oy/=isoOrig.length;
+  let far=-1,fd=0,fa=0;
+  for(let s=0;s<N;s++){if(ar[s]>end)continue;const q=SP[s];for(let b=0;b<2;b++)if(ar[s]-t0<=(b+1)*1800){o[b][1].add(SNI[s]);if(q>=0&&q!==sel)o[b][0].add(q);}
+    if(q>=0&&q!==sel){const d=Math.hypot(PP[q][0]-ox,PP[q][1]-oy);if(d>fd){fd=d;far=q;fa=ar[s];}}}
+  const pl=(n,a,b,c)=>n.toLocaleString('cs-CZ')+' '+(n===1?a:n>1&&n<5?b:c),row=b=>`${pl(o[b][0].size,'obec','obce','obcí')}<small>${pl(o[b][1].size,'zastávka','zastávky','zastávek')}</small>`;
+  const st=`<p class="sub">Odjezd ${isoOrig.length&&(selStop>=0||sel===0)?'ze zastávky '+esc(stopName(isoOrig[0])):'z obce '+esc(PL[sel][0])} v ${fmt(t0)}, s přestupy a pěšky do 400 m. Podle jízdního řádu, bez zpoždění.</p>
+    <div class="iramp" aria-hidden="true">${[0,1,2,3,4,5].map(b=>`<span style="border-color:var(--iso${b})">${(b+1)*10}${b===5?' min':''}</span>`).join('')}</div>
+    <dl class="facts"><div><dt>Do 30 minut</dt><dd>${row(0)}</dd></div><div><dt>Do hodiny</dt><dd>${row(1)}</dd></div>
+    ${far>=0?`<div><dt>Nejdál do hodiny</dt><dd>${esc(PL[far][0])}<small>${num(fd*111.2)} km vzdušnou čarou, příjezd ${fmt(fa)}</small></dd></div>`:''}</dl>`;
+  if(st!==isoStat){isoStat=st;isoInfo.innerHTML=st;}
+  return ar;}
+function isoStep(now){if(isoRev<1){isoRev=Math.min(1,(now-isoAt)/1600);isoDirty=true;}
+  const m=Math.floor(Math.max(0,t)/60);if(m!==isoMin){isoMin=m;isoRun(m*60);}}
+// strom spojů do každé dosažené zastávky, barva podle příjezdu (po 10 min); při zapnutí se rozlévá od výchozí zastávky
+function drawIso(){isoDirty=false;isoC.width=map.width;isoC.height=map.height;ictx.setTransform(dpr,0,0,dpr,0,0);ictx.lineCap='round';ictx.lineJoin='round';
+  const lw=Math.max(1.8,Math.min(4.5,view.z/1600)),lim=isoRev*ISO_H,X=x=>W/2+(x-netV.cx)*view.z,Y=y=>H/2+(y-netV.cy)*view.z,B=[[],[],[],[],[],[]];
+  for(let s=0;s<P.length;s++){const c=iPc[s];if(c<0)continue;const d=iAv[s]-isoT0;if(d>lim)continue;
+    const a=P[CN.f[c]],b=P[s],ax=X(a[0]),bx=X(b[0]),ay=Y(a[1]),by=Y(b[1]);if(Math.max(ax,bx)<-300||Math.min(ax,bx)>W+300||Math.max(ay,by)<-300||Math.min(ay,by)>H+300)continue;
+    B[Math.min(5,Math.max(0,Math.ceil(d/600)-1))].push(c);}
+  const path=c=>{const a=CN.f[c],b=CN.t[c],[sh]=shapeOf(a,b);if(sh){ictx.moveTo(X(sh.x[0]),Y(sh.y[0]));for(let i=1;i<sh.x.length;i++)ictx.lineTo(X(sh.x[i]),Y(sh.y[i]));}
+    else{ictx.moveTo(X(P[a][0]),Y(P[a][1]));ictx.lineTo(X(P[b][0]),Y(P[b][1]));}};
+  ictx.strokeStyle=css['bg'];ictx.lineWidth=lw+2.5;ictx.beginPath();for(const a of B)for(const c of a)path(c);ictx.stroke();
+  for(let b=5;b>=0;b--){if(!B[b].length)continue;ictx.strokeStyle=css['iso'+b];ictx.lineWidth=lw;ictx.beginPath();for(const c of B[b])path(c);ictx.stroke();}}
+function setIso(v,zoom=true){iso=v&&sel>=0;isoB.setAttribute('aria-pressed',iso);card.classList.toggle('iso-on',iso);isoMin=-1;
+  if(!iso){isoInfo.innerHTML='';isoStat='';setHash();return;}
+  if(!CN)isoBuild();
+  if(selStop>=0&&SP[selStop]===sel){const n=SNI[selStop];isoOrig=selStops.filter(i=>SNI[i]===n);}
+  else if(sel===0){let b=selStops[0],bd=1e9;for(const i of selStops){const d=Math.hypot(P[i][0]-PP[0][0],P[i][1]-PP[0][1]);if(d<bd){bd=d;b=i;}}selStop=b;isoOrig=selStops.filter(i=>SNI[i]===SNI[b]);}
+  else{selStop=-1;isoOrig=selStops.slice();}
+  if(playing)togglePlay();isoAt=performance.now();isoRev=0;isoMin=Math.floor(Math.max(0,t)/60);const ar=isoRun(isoMin*60);
+  if(zoom){const pts=[];for(let s=0;s<P.length;s++)if(ar[s]<=isoT0+ISO_H)pts.push(P[s]);if(pts.length)showBox(pts,350);}
+  card.scrollTop=0;setHash();}
+isoB.onclick=()=>setIso(!iso);
 // ===== rekordy dne: spočítají se z jízdního řádu při prvním otevření karty
 const rec=document.getElementById('rec'),recB=document.getElementById('recB');let recTrip=-1,recDone=false;
 const MN=['tramvaj','trolejbus','autobus','noční autobus','loď','regionální autobus','vlak'];
@@ -408,7 +492,7 @@ function setRec(v){if(v&&sel>=0)select(-1);if(v&&vTrip>=0)selVeh(-1);rec.hidden=
   if(v){if(!recDone){buildRec();recDone=true;}rec.scrollTop=0;}else recTrip=-1;setHash();}
 recB.onclick=()=>setRec(rec.hidden);
 document.getElementById('rX').onclick=()=>setRec(false);
-document.getElementById('rFacts').onclick=e=>{const b=e.target.closest('.go');if(!b)return;const[k,v]=b.dataset.g.split(':'),x=+v;
+document.getElementById('rFacts').onclick=e=>{const b=e.target.closest('.go');if(!b)return;setLive(false);const[k,v]=b.dataset.g.split(':'),x=+v;
   if(k==='t'){recTrip=-1;t=x;playing=false;setPlayIcon();region=true;regB.textContent='Brno';fit();}
   else if(k==='v'){const tr=trips[x];recTrip=x;showBox([...tr.S].map(s=>P[s]),350);t=Math.max(0,tr.a);if(!playing)togglePlay();}
   else if(k==='p')select(x);};
@@ -436,7 +520,7 @@ function vehStep(){const tr=trips[vTrip];renderVeh();if(!follow)return;if(t>tr.b
   const p=posAt(tr,t),isM=W<640;view.cx=p[0]+(isM?0:170/view.z);view.cy=p[1]+(isM?H*.2/view.z:0);
   if(Math.hypot(netDx(),netDy())>24*dpr)netDirty=true;}
 function setFollow(v){follow=v;vFollow.setAttribute('aria-pressed',v);vFollow.textContent=v?'Sleduji':'Sledovat';
-  if(v){if(view.z<4000){view.z=6000;netDirty=true;}document.querySelector('.spd button[data-s="240"]').click();}}
+  if(v){if(view.z<4000){view.z=6000;netDirty=true;}if(!live)document.querySelector('.spd button[data-s="240"]').click();}}
 vFollow.onclick=()=>{setFollow(!follow);if(follow&&!playing)togglePlay();};
 document.getElementById('vX').onclick=()=>selVeh(-1);
 // ===== sdílení: odkaz s časem, výřezem mapy a případně vybraným spojem (spoj = linka@odjezd z výchozí zastávky)
@@ -450,15 +534,15 @@ async function share(btn){const url=shareUrl(),txt=btn.textContent;
   catch(e){if(e&&e.name==='AbortError')return;prompt('Zkopíruj odkaz:',url);}}
 shareB.onclick=()=>share(shareB);document.getElementById('vShare').onclick=e=>share(e.currentTarget);
 // hash
-function hashParts(){return[sel>=0?'obec='+encodeURIComponent(PL[sel][0]):'',typeof hist!=='undefined'&&hist?'1953':'',lines?'':'bezsite',typeof expo!=='undefined'&&expo?'expozice':'',typeof rec!=='undefined'&&!rec.hidden?'rekordy':''].filter(Boolean);}
+function hashParts(){return[sel>=0?'obec='+encodeURIComponent(PL[sel][0]):'',iso?(selStop>=0?'dojezd='+encodeURIComponent(stopName(selStop)):'dojezd'):'',typeof hist!=='undefined'&&hist?'1953':'',lines?'':'bezsite',typeof expo!=='undefined'&&expo?'expozice':'',typeof rec!=='undefined'&&!rec.hidden?'rekordy':''].filter(Boolean);}
 function setHash(){const h=hashParts().join('&');try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}
 // click on map selects nearest place
 let downAt=null;map.addEventListener('pointerdown',e=>{downAt=[e.clientX,e.clientY,performance.now()];});
 map.addEventListener('pointerup',e=>{if(!downAt)return;const[x0,y0,t0]=downAt;downAt=null;if(Math.hypot(e.clientX-x0,e.clientY-y0)>6||performance.now()-t0>500)return;
   const v=vehAt(e.clientX,e.clientY);if(v>=0){selVeh(v);return;}
-  let best=-1,bd=12;
-  for(let i=0;i<P.length;i++){const d=Math.hypot(px(P[i])-e.clientX,py(P[i])-e.clientY);if(d<bd){bd=d;best=SP[i];}}
-  if(best>=0)select(best,false);});
+  let best=-1,bs=-1,bd=12;
+  for(let i=0;i<P.length;i++){const d=Math.hypot(px(P[i])-e.clientX,py(P[i])-e.clientY);if(d<bd){bd=d;best=SP[i];bs=i;}}
+  if(best>=0)select(best,false,bs);});
 // ===== 1953: historical orthophoto (CENIA WMTS, S-JTSK) with swipe
 const KR=(()=>{const R=Math.PI/180,a=6377397.155,f=1/299.1528128,e2=2*f-f*f,e=Math.sqrt(e2),pc=49.5*R,lO=(24+50/60)*R,ac=30.28813975277778*R,pp=78.5*R,kp=.9999;
   const B=Math.sqrt(1+e2*Math.cos(pc)**4/(1-e2)),A=a*Math.sqrt(1-e2)/(1-e2*Math.sin(pc)**2),g0=Math.asin(Math.sin(pc)/B);
@@ -572,14 +656,16 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',readCss);
 new MutationObserver(readCss).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 addEventListener('resize',()=>{resize();if(hist){swX=Math.min(swX,W);placeSwipe();}});
 resize();fit();readCss();setPlayIcon();
-{const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/obec=([^&]+)/);if(/1953/.test(h))setHist(true);if(/(^|&)bezsite($|&)/.test(h))setLines(false);if(/(^|&)expozice($|&)/.test(h))setExpo(true);if(/(^|&)rekordy($|&)/.test(h))setRec(true);
+{const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/obec=([^&]+)/);
+ {const n=pragueNow();if(n.d!==DATA.date)nowB.hidden=true;else if(!/(^|&)expozice($|&)/.test(h))t=Math.min(86340,n.s);}  // otevřeno v den jízdního řádu: začít aktuálním časemif(/1953/.test(h))setHist(true);if(/(^|&)bezsite($|&)/.test(h))setLines(false);if(/(^|&)expozice($|&)/.test(h))setExpo(true);if(/(^|&)rekordy($|&)/.test(h))setRec(true);
  if(m){const i=PL.findIndex(p=>p[0]===m[1]);if(i>=0)select(i);}
  const tm=h.match(/(?:^|&)cas=(\d{1,2}):(\d{2})/),pv=h.match(/(?:^|&)pohled=([\d.]+),([\d.]+),(\d+)/),sp=h.match(/(?:^|&)spoj=([^@&]+)@(\d{1,2}):(\d{2})/);
  if(tm){t=Math.min(86340,tm[1]*3600+tm[2]*60);playing=false;setPlayIcon();}
+ const dj=h.match(/(?:^|&)dojezd(?:=([^&]+))?(?:&|$)/);if(dj&&sel>=0){const s=dj[1]?SP.findIndex((q,i)=>q===sel&&stopName(i)===dj[1]):-1;selStop=s;setIso(true);}
  if(pv){region=+pv[3]<2000;regB.textContent=region?'Brno':'Celý kraj';view.z=Math.max(350,Math.min(60000,+pv[3]));view.cx=(pv[1]-16.61)*kx;view.cy=-(pv[2]-lat0);netDirty=true;}
  if(sp){const mn=sp[2]*60+ +sp[3],i=trips.findIndex(tr=>R[tr.r][0]===sp[1]&&((Math.floor(tr.a/60))%1440+1440)%1440===mn);
    if(i>=0){selVeh(i);if(!tm)t=Math.max(0,trips[i].a);setFollow(true);if(!playing)togglePlay();}}
- if(tm||pv||sp)setHash();}
+ if(tm||pv||sp||dj)setHash();}
 if(document.fonts)document.fonts.ready.then(()=>netDirty=true);
 requestAnimationFrame(frame);
 </script>

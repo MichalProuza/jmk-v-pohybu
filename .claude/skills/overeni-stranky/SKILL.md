@@ -29,6 +29,7 @@ Snímky si prohlédni nástrojem Read (je to obrázek) a když je výsledek pro 
 | `pohled=lon,lat,zoom` | výřez mapy, např. `16.6080,49.1950,9000` centrum Brna, zoom < 2000 = celý kraj |
 | `spoj=linka@HH:MM` | otevře kartu spoje a sleduje ho (odjezd z výchozí zastávky) |
 | `obec=Název` | karta obce, např. `obec=Kuřim` |
+| `obec=Kuřim&dojezd`, `obec=Brno&dojezd=Česká` | karta obce s dojezdem do hodiny (z obce / ze zastávky) |
 | `1953` | režim Brno v roce 1953 |
 | `rekordy` | karta Rekordy dne |
 | `expozice` | Dlouhá expozice |
@@ -40,6 +41,7 @@ Parametry se spojují `&`. Po načtení stránka `cas/pohled/spoj` z adresy odst
 
 - Síť je zablokovaná (všechny `http(s)` požadavky se ruší): fonty Barlow se nenačtou (použije se náhradní
   písmo) a v režimu 1953 nejsou letecké snímky. Rozvržení, data, vozidla a karty se tím neovlivní.
-- Animace běží: snímek se pořizuje ~2,5 s po načtení. Pro deterministický obraz zadej `cas=`.
+- Animace běží: snímek se pořizuje ~2,5 s po načtení. Bez `cas=` stránka začíná aktuálním časem (je-li dnes den
+  jízdního řádu), pro deterministický obraz zadej `cas=`.
 - Interakce (klik, tažení) se dá doplnit přímo do skriptu přes `page.mouse` / `page.click('#id')`
   – pro jednorázovou kontrolu napiš vlastní krátký skript do scratchpadu podle `check.mjs`.

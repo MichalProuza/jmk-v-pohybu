@@ -10,6 +10,19 @@ Vozidla jedou po skutečných trasách linek (ulice, koleje), ne vzdušnou čaro
 Síť linek je ve výchozím stavu zobrazená, vypíná a zapíná se tlačítkem **Síť linek** v dolní liště
 (vypnutý stav se ukládá do adresy jako `#bezsite`).
 
+Když se stránka otevře v den, na který je jízdní řád, začne aktuálním časem (Europe/Prague)
+a přehrává běžnou rychlostí. Tlačítko **Teď** přetočí na aktuální čas a přepne na přehrávání naživo:
+čas běží podle hodin a vozidla jedou reálným tempem (červená tečka na tlačítku). Pauza, posun času
+nebo volba rychlosti režim naživo ukončí. V jiný den, než je jízdní řád, je tlačítko skryté a stránka začíná o půlnoci.
+
+Na kartě obce je tlačítko **Kam se odsud dostanu za hodinu**. Od času na mapě spočítá nejdřívější příjezd
+na všechny zastávky do hodiny (s přestupy, přestup na téže zastávce 1 min, pěšky k zastávkám do 400 m)
+a vykreslí spoje, kterými se tam jede, barevně po 10 minutách. Karta ukáže počet obcí a zastávek
+do 30 minut a do hodiny a nejvzdálenější dosažitelnou obec. Když se obec vybrala kliknutím na zastávku,
+počítá se z této zastávky (všech nástupišť stejného jména), jinak ze všech zastávek obce (Brno ze zastávky
+nejblíž středu). Při posunu času nebo přehrávání se dojezd přepočítává, kliknutím na jinou zastávku se změní
+výchozí místo. V adrese `#obec=Kuřim&dojezd`, případně `dojezd=Název zastávky`.
+
 Tlačítko **Dlouhá expozice** přestane mazat stopy vozidel, takže za den z nich vznikne světelný obraz
 dopravy v kraji (v adrese `#expozice`). Obraz se kreslí od chvíle zapnutí, po posunu mapy nebo
 přetočení času zpět se překreslí celý. Tlačítko **Uložit obrázek** stáhne mapu jako PNG s popiskem
