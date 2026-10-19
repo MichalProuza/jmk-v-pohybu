@@ -53,7 +53,8 @@ button:focus-visible,#scrub:focus-visible{outline:2px solid var(--bus);outline-o
 #play{width:44px;height:44px;border-radius:50%;padding:0;display:grid;place-items:center;background:var(--ink);color:var(--bg);border:none}
 #play svg{width:18px;height:18px;fill:currentColor}
 .spd button[aria-pressed="true"],#linesB[aria-pressed="true"],#expB[aria-pressed="true"],#nowB[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-#nowB[aria-pressed="true"]::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--tram);margin-right:6px;vertical-align:1px}
+#vidB[aria-pressed="true"]{border-color:var(--tram);font-variant-numeric:tabular-nums}
+#nowB[aria-pressed="true"]::before,#vidB[aria-pressed="true"]::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--tram);margin-right:6px;vertical-align:1px}
 #scrub{width:100%;height:64px;display:block;cursor:pointer;touch-action:none;border-radius:6px}
 .legend{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:4px 6px;font-size:14px}
 .legend button{display:flex;align-items:center;gap:7px;border-color:transparent;padding:4px 8px}
@@ -193,6 +194,7 @@ body.hist-on .clock .t,body.hist-on .clock .n{text-shadow:0 1px 6px rgba(0,0,0,.
     <button id="linesB" aria-pressed="true" title="Zobrazit nebo skrýt síť linek">Síť linek</button>
     <button id="expB" aria-pressed="false" title="Stopy vozidel se nemažou, za den z nich vznikne světelný obraz dopravy">Dlouhá expozice</button>
     <button id="shareB" title="Zkopírovat odkaz na tento okamžik a výřez mapy">Sdílet</button>
+    <button id="vidB" aria-pressed="false" title="Nahrát celý den jako video (30 s) v tomto výřezu mapy, dalším klepnutím nahrávání ukončíš">Video dne</button>
     <button id="saveB" hidden title="Uložit mapu s expozicí jako obrázek PNG">Uložit obrázek</button>
   </div>
   <canvas id="scrub" tabindex="0" role="slider" aria-label="Čas dne" aria-valuemin="0" aria-valuemax="1440"></canvas>
@@ -304,6 +306,39 @@ saveB.onclick=()=>{const fh=Math.round(48*dpr),c=document.createElement('canvas'
   x.fillStyle=css['ink-2'];x.font='500 13px '+ff;x.textAlign='right';x.fillText('Spoje IDS JMK podle jízdního řádu · michalprouza.github.io/jmk-v-pohybu',W-16,24);
   c.toBlob(b=>{if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`jmk-v-pohybu-${DATA.date}-${clk.textContent.replace(':','')}.png`;
     document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);},'image/png');};
+// ===== video dne: celý den za 30 s (rychlost Rychle) nahraný z plátna mapy s popiskem; nahrává se aktuální výřez, posun mapy se nahraje taky
+// v režimu 1953 nejde (letecké snímky z cizí domény zablokují čtení plátna)
+const vidB=document.getElementById('vidB'),vC=document.createElement('canvas'),vctx=vC.getContext('2d');
+const VT=window.MediaRecorder&&vC.captureStream?['video/mp4;codecs=avc1.42E01F','video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm'].find(m=>MediaRecorder.isTypeSupported(m)):null;
+let vrec=null,vChunks=[],vAt=0,vSec=-1,vU=1,vFh=0,vSh=0;
+if(!VT)vidB.hidden=true;
+function vidFrame(now){const w=vC.width,mh=vC.height-vFh,u=vU,ff=getComputedStyle(document.body).fontFamily,cf='"Barlow Condensed",'+ff;
+  vctx.setTransform(1,0,0,1,0,0);vctx.fillStyle=css['bg'];vctx.fillRect(0,0,w,vC.height);
+  const sh=Math.min(vSh,map.height),k=Math.min(w/map.width,mh/sh);vctx.drawImage(map,0,0,map.width,sh,(w-map.width*k)/2,(mh-sh*k)/2,map.width*k,sh*k);
+  vctx.setTransform(u,0,0,u,0,0);const cw=w/u,ch=mh/u,halo=(s,x,y)=>{vctx.lineWidth=4;vctx.strokeStyle=css['bg'];vctx.lineJoin='round';vctx.strokeText(s,x,y);vctx.fillText(s,x,y);};
+  vctx.textBaseline='top';vctx.textAlign='left';vctx.fillStyle=css['ink'];vctx.font=`700 ${Math.max(22,Math.min(40,cw*.028))}px ${cf}`;if(cw<640){halo('Jižní Morava',16,16);halo('v pohybu',16,42);}else halo('Jižní Morava v pohybu',18,16);
+  vctx.textAlign='right';vctx.font=`600 ${Math.max(48,Math.min(96,cw*.07))}px ${cf}`;halo(clk.textContent,cw-18,10);
+  vctx.font=`500 ${cw<500?13:15}px ${ff}`;vctx.fillStyle=css['ink-2'];halo(`${cnt.textContent} vozidel na trati`,cw-18,14+Math.max(48,Math.min(96,cw*.07))*.92);
+  // pruh dole: průběh dne, datum, zdroj
+  const y0=ch;vctx.fillStyle=css['net'];vctx.fillRect(0,y0,cw,3);vctx.fillStyle=css['ink'];vctx.fillRect(0,y0,cw*Math.max(0,t)/86400,3);
+  vctx.textBaseline='middle';vctx.textAlign='left';vctx.fillStyle=css['ink'];vctx.font=`600 ${cw<500?12:15}px ${ff}`;
+  vctx.fillText(new Date(DATA.date+'T12:00').toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · spoje IDS JMK podle jízdního řádu',14,y0+vFh/u/2+1);
+  if(cw>=500){vctx.textAlign='right';vctx.fillStyle=css['ink-2'];vctx.font=`500 13px ${ff}`;vctx.fillText('michalprouza.github.io/jmk-v-pohybu',cw-14,y0+vFh/u/2+1);}
+  const s=Math.floor((now-vAt)/1000);if(s!==vSec){vSec=s;vidB.textContent=`Nahrávám ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}}
+function setVid(v){if(!v){if(!vrec)return;const r=vrec;vrec=null;r.stop();vidB.setAttribute('aria-pressed',false);vidB.textContent='Video dne';return;}
+  if(vrec||!VT||hist)return;
+  // rozměry: viditelná část mapy nad lištou (max. 1920 px na delší straně, sudé kvůli kodeku) + pruh s popiskem
+  vSh=Math.round(Math.min(H,document.querySelector('.dock').getBoundingClientRect().top)*dpr);
+  const sc=Math.min(1,1920/Math.max(map.width,vSh));vU=dpr*sc;vFh=Math.round(36*vU);
+  vC.width=Math.round(map.width*sc/2)*2;vC.height=Math.round((vSh*sc+vFh)/2)*2;vFh=vC.height-Math.round(vSh*sc);
+  setLive(false);document.querySelector('.spd button[data-s="2880"]').click();t=0;if(!playing)togglePlay();
+  vAt=performance.now();vSec=-1;vidFrame(vAt);vChunks=[];
+  try{vrec=new MediaRecorder(vC.captureStream(30),{mimeType:VT,videoBitsPerSecond:8e6});}catch(e){vrec=null;vidB.hidden=true;return;}
+  const r=vrec;r.ondataavailable=e=>{if(e.data&&e.data.size)vChunks.push(e.data);};
+  r.onstop=()=>{const b=new Blob(vChunks,{type:VT.split(';')[0]});vChunks=[];if(!b.size)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);
+    a.download=`jmk-v-pohybu-${DATA.date}${expo?'-expozice':''}.${VT.includes('mp4')?'mp4':'webm'}`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);};
+  r.start(1000);vidB.setAttribute('aria-pressed',true);}
+vidB.onclick=()=>setVid(!vrec);
 function frame(now){const dt=Math.min(.1,(now-last)/1000);last=now;
   if(live&&!playing)setLive(false);
   if(playing){if(live)t=Math.min(86340,liveOff+now/1000);else t+=dt*speed;if(t>=86340){t=86340;playing=false;setPlayIcon();}}
@@ -331,6 +366,7 @@ function frame(now){const dt=Math.min(.1,(now-last)/1000);last=now;
   ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(lab,netDx(),netDy());
   const hh=Math.floor(t/3600),mm=Math.floor(t%3600/60);clk.textContent=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');
   cnt.textContent=cnts.reduce((a,b)=>a+b,0);MODES.forEach((m,k)=>{legB[k].textContent=on[k]?cnts[k]:'–'});
+  if(vrec){vidFrame(now);if(!playing)setVid(false);}  // konec dne nebo pauza nahrávání ukončí
   drawScrub();scrub.setAttribute('aria-valuenow',Math.floor(t/60));scrub.setAttribute('aria-valuetext',clk.textContent);
   requestAnimationFrame(frame);}
 // scrubber: stacked activity curve
@@ -634,7 +670,7 @@ document.getElementById('chips').onclick=e=>{const b=e.target.closest('button');
 const hbT=document.getElementById('hbT');function hbMin(v){v=v&&matchMedia('(max-width:640px)').matches;document.body.classList.toggle('hb-min',v);hbT.setAttribute('aria-expanded',!v);hbT.textContent=v?'Tramvaje a čtvrti ▾':'Skrýt ▴';}
 hbT.onclick=()=>hbMin(!document.body.classList.contains('hb-min'));hbMin(true);
 function goTo(lo,la,z){view.z=z;view.cx=(lo-16.61)*kx;view.cy=-(la-lat0);netDirty=true;}
-function setHist(v){hist=v;saveB.hidden=!expo||v;document.body.classList.toggle('hist-on',v);histB.setAttribute('aria-pressed',v);histBar.hidden=!v;swipe.hidden=!v;attr.hidden=!v;
+function setHist(v){if(v)setVid(false);hist=v;saveB.hidden=!expo||v;vidB.hidden=v||!VT;document.body.classList.toggle('hist-on',v);histB.setAttribute('aria-pressed',v);histBar.hidden=!v;swipe.hidden=!v;attr.hidden=!v;
   if(v){if(sel>=0)select(-1,false);swX=W/2;placeSwipe();}// čas i výřez mapy zůstávají beze změny
   netDirty=true;setHash();}
 histB.onclick=()=>setHist(!hist);
@@ -657,7 +693,8 @@ new MutationObserver(readCss).observe(document.documentElement,{attributes:true,
 addEventListener('resize',()=>{resize();if(hist){swX=Math.min(swX,W);placeSwipe();}});
 resize();fit();readCss();setPlayIcon();
 {const h=decodeURIComponent(location.hash.slice(1));const m=h.match(/obec=([^&]+)/);
- {const n=pragueNow();if(n.d!==DATA.date)nowB.hidden=true;else if(!/(^|&)expozice($|&)/.test(h))t=Math.min(86340,n.s);}  // otevřeno v den jízdního řádu: začít aktuálním časemif(/1953/.test(h))setHist(true);if(/(^|&)bezsite($|&)/.test(h))setLines(false);if(/(^|&)expozice($|&)/.test(h))setExpo(true);if(/(^|&)rekordy($|&)/.test(h))setRec(true);
+ {const n=pragueNow();if(n.d!==DATA.date)nowB.hidden=true;else if(!/(^|&)expozice($|&)/.test(h))t=Math.min(86340,n.s);}  // otevřeno v den jízdního řádu: začít aktuálním časem
+ if(/1953/.test(h))setHist(true);if(/(^|&)bezsite($|&)/.test(h))setLines(false);if(/(^|&)expozice($|&)/.test(h))setExpo(true);if(/(^|&)rekordy($|&)/.test(h))setRec(true);
  if(m){const i=PL.findIndex(p=>p[0]===m[1]);if(i>=0)select(i);}
  const tm=h.match(/(?:^|&)cas=(\d{1,2}):(\d{2})/),pv=h.match(/(?:^|&)pohled=([\d.]+),([\d.]+),(\d+)/),sp=h.match(/(?:^|&)spoj=([^@&]+)@(\d{1,2}):(\d{2})/);
  if(tm){t=Math.min(86340,tm[1]*3600+tm[2]*60);playing=false;setPlayIcon();}

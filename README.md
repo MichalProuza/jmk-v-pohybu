@@ -28,6 +28,12 @@ dopravy v kraji (v adrese `#expozice`). Obraz se kreslí od chvíle zapnutí, po
 přetočení času zpět se překreslí celý. Tlačítko **Uložit obrázek** stáhne mapu jako PNG s popiskem
 (datum a časové rozpětí). V režimu Brno v roce 1953 uložení nejde, letecké snímky export neumožňují.
 
+Tlačítko **Video dne** přetočí na 0:00, přepne na rychlost Rychle a nahraje celý den jako 30sekundové video
+(MP4, kde ho prohlížeč umí, jinak WebM) s nadpisem, hodinami, počtem vozidel a pruhem s datem. Nahrává se
+viditelná část mapy nad lištou (na mobilu tedy na výšku) a všechno, co na ní je: posun a přiblížení během
+nahrávání, Dlouhá expozice, dojezd, sledované vozidlo. Na konci dne se video samo stáhne, dalším klepnutím
+nebo pauzou se nahrávání ukončí dřív. V režimu Brno v roce 1953 je tlačítko skryté (stejně jako u obrázku).
+
 Tlačítko **Rekordy dne** otevře kartu se zajímavostmi spočítanými z jízdního řádu daného dne:
 nejvíc vozidel naráz, nejklidnější chvíle noci, počet spojů a ujeté kilometry, nejdelší
 a nejrychlejší spoj, linka s nejvíc spoji a obec s nejvíc odjezdy. U většiny je odkaz
