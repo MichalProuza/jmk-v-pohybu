@@ -41,7 +41,7 @@ Parametry se spojují `&`. Po načtení stránka `cas/pohled/spoj` z adresy odst
 
 - Síť je zablokovaná (všechny `http(s)` požadavky se ruší): fonty Barlow se nenačtou (použije se náhradní
   písmo) a v režimu 1953 nejsou letecké snímky. Rozvržení, data, vozidla a karty se tím neovlivní.
-- Animace běží: snímek se pořizuje ~2,5 s po načtení. Bez `cas=` stránka začíná aktuálním časem (je-li dnes den
-  jízdního řádu), pro deterministický obraz zadej `cas=`.
+- Animace běží: snímek se pořizuje ~2,5 s po načtení. Bez `cas=` stránka začíná o půlnoci a přehrává,
+  pro deterministický obraz zadej `cas=`.
 - Interakce (klik, tažení) se dá doplnit přímo do skriptu přes `page.mouse` / `page.click('#id')`
   – pro jednorázovou kontrolu napiš vlastní krátký skript do scratchpadu podle `check.mjs`.
