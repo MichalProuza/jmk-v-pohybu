@@ -41,15 +41,13 @@ Nástroj Read používej jen s `offset`/`limit` mimo datové řádky. Edit fungu
   a `:root[data-theme="dark"]`) – novou barvu přidej do všech tří bloků. Mobil: `@media (max-width:640px)`.
 - **ř. 133–184** HTML: `.head` (nadpis + datum), `.clock`, `.finder` (Brno v roce 1953, Rekordy dne),
   `#histBar`, `#swipe`, karty `aside.card` (`#card` obec, `#veh` spoj, `#rec` rekordy), `.dock`
-  (play, rychlost, Teď, Celý kraj, Síť linek, Dlouhá expozice, Sdílet, Video dne, Uložit obrázek, `#scrub` časová osa, `#leg` legenda).
+  (play, rychlost, Teď, Celý kraj, Síť linek, Dlouhá expozice, Sdílet, Uložit obrázek, `#scrub` časová osa, `#leg` legenda).
 - **ř. 185+** `<script>`, oddíly začínají komentářem `// =====`:
   - základ: `MODES` (7 módů: tram, trol, bus, night, boat, reg, train), dekódování `trips`
     (`T` časy, `S` zastávky, `a`/`b` začátek/konec, `m` mód, `r` linka), projekce `P`, `SHAPES`/`shapeOf`
   - kreslení: `view {cx,cy,z}`, `px/py`, `fit()`, `drawNet()` (síť + popisky do offscreen canvasu, `netDirty=true` vynutí překreslení),
     `frame()` hlavní smyčka, `posAt/trail/segAt`, `css` (čte CSS proměnné přes `readCss()`)
   - Dlouhá expozice (`expo`, `expPaint`, `setExpo`), uložení PNG
-  - `// ===== video dne` – `setVid`, `vidFrame` (plátno `vC` = mapa nad lištou + popisky, `MediaRecorder`, typ `VT`);
-    `frame()` volá `vidFrame` každý snímek, pauza nebo konec dne nahrávání ukončí
   - časová osa `drawScrub`, play/rychlost, legenda
   - Teď: `pragueNow`, `setLive` (`live` = čas podle hodin, `speed=1`; ukončí ho pauza, posun času, volba rychlosti)
   - `// ===== places: card` – karta obce (`select(p,zoom,st)`, `selStop` = kliknutá zastávka, `showBox`, `zoomTo`)
