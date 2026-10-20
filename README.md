@@ -40,6 +40,28 @@ Tlačítko **Sdílet** (v liště i na kartě spoje) zkopíruje odkaz na aktuál
 parametrům adresy přidá `cas=HH:MM`, `pohled=lon,lat,zoom` a u vybraného vozidla `spoj=linka@HH:MM`
 (odjezd z výchozí zastávky). Na mobilu se otevře systémové sdílení.
 
+## Klávesnice a textový přehled spojů
+
+Mezerník přepíná přehrávání a pauzu. Šipky **← / →** posunou čas o 10 minut,
+se **Shiftem** o hodinu, a přehrávání pozastaví. Fungují i na časové ose.
+Zkratky nezasahují do psaní ve vyhledávání, tlačítek a odkazů ani do zkratek
+s Ctrl, Alt či Cmd. Tlačítka se běžně ovládají Tabem, Enterem a mezerníkem.
+**Esc** zavře otevřenou kartu.
+
+Tlačítko **Spoje na trati** otevře textový seznam vozidel aktivních v čase mapy
+v celém kraji podle zapnutých druhů dopravy. Při otevření se přehrávání pozastaví,
+aby se seznam během čtení neměnil. Hledat lze linku nebo kteroukoli zastávku spoje,
+i bez diakritiky. Seznam obsahuje směr, výchozí a konečný čas a další zastávku;
+po 20 výsledcích se stránkuje. Výběr spoje otevře jeho detail se zastávkami.
+Zavření detailu vrátí přehled. Při změně minuty mapy nebo filtrů se výsledky obnoví.
+Změny stavu výsledků jsou označeny pro oznámení čtečkou obrazovky; po návratu
+z detailu se zaměření vrátí na vybraný spoj. Seznam doplňuje mapu; nezobrazuje skutečná zpoždění.
+
+Automatická kontrola klávesnice, hledání, filtrů, stránkování a návratu z detailu
+na desktopu i mobilu: `node tools/check_accessibility.cjs`. Vyžaduje Node.js,
+Playwright a Chromium (volitelně cesta v `CHROMIUM`). Sama spustí dočasný HTTP server,
+blokuje externí požadavky a uloží snímky do dočasného adresáře. Nemění data stránky.
+
 ## Denní aktualizace jízdního řádu (`tools/update_day.sh`)
 
 Stránka zobrazuje jízdní řád na jeden konkrétní den (datum je v nadpisu a v `DATA.date`).
