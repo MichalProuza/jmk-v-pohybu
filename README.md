@@ -3,14 +3,26 @@
 Animovaná mapa všech spojů IDS JMK (MHD Brno, regionální autobusy a vlaky) podle jízdního řádu,
 s porovnáním leteckých snímků Brna z roku 1953 a dneška.
 
-Celá stránka je jeden soubor `index.html` – data jízdních řádů i trasy jsou vložená přímo v něm,
-žádný build ani server není potřeba.
+Celá stránka je jeden soubor `index.html` (asi 2,6 MB) – data jízdních řádů i trasy jsou vložená přímo v něm,
+žádný build ani server není potřeba. Z internetu si stránka bere jen písmo Barlow (Google Fonts)
+a v režimu Brno v roce 1953 letecké snímky; bez nich mapa, vozidla i karty fungují dál.
 
 Vozidla jedou po skutečných trasách linek (ulice, koleje), ne vzdušnou čarou.
 Síť linek je ve výchozím stavu zobrazená, vypíná a zapíná se tlačítkem **Síť linek** v dolní liště
 (vypnutý stav se ukládá do adresy jako `#bezsite`).
 
-Stránka vždy začíná o půlnoci. Tlačítko **Teď** přetočí na aktuální čas (Europe/Prague) a přepne na přehrávání naživo:
+Mapa se posouvá tažením, přibližuje kolečkem, dvojklikem nebo dvěma prsty. Tlačítko **Celý kraj** / **Brno**
+přepíná mezi výřezem Brna a celým krajem. V dolní liště je dál přehrávání a pauza, tři rychlosti
+(**Pomalu**, **24 h za 90 s**, **Rychle**), časová osa s grafem počtu vozidel během dne (kliknutím nebo tažením
+se čas přetočí) a legenda: každý druh dopravy (tramvaje, trolejbusy, autobusy MHD, noční autobusy, loď,
+regionální autobusy, vlaky) v ní jde kliknutím vypnout a zapnout a ukazuje, kolik vozidel je právě na trati.
+
+Kliknutí na zastávku otevře kartu obce: počet odjezdů za den, linky, odjezdy po hodinách, první ranní
+spojení do centra Brna a nejdelší pauzu mezi odjezdy (5–22 h); u Brna jen počet odjezdů ze všech zastávek.
+Spoje, které obcí neprojíždějí, na mapě zeslábnou. V adrese `#obec=Kuřim`.
+
+Stránka vždy začíná o půlnoci a hned přehrává (při systémovém nastavení omezení pohybu začíná pozastavená),
+ve 23:59 se přehrávání zastaví. Tlačítko **Teď** přetočí na aktuální čas (Europe/Prague) a přepne na přehrávání naživo:
 čas běží podle hodin a vozidla jedou reálným tempem (červená tečka na tlačítku). Pauza, posun času
 nebo volba rychlosti režim naživo ukončí. V jiný den, než je jízdní řád, je tlačítko skryté.
 
@@ -23,8 +35,10 @@ nejblíž středu). Při posunu času nebo přehrávání se dojezd přepočít�
 výchozí místo. V adrese `#obec=Kuřim&dojezd`, případně `dojezd=Název zastávky`.
 
 Tlačítko **Dlouhá expozice** přestane mazat stopy vozidel, takže za den z nich vznikne světelný obraz
-dopravy v kraji (v adrese `#expozice`). Obraz se kreslí od chvíle zapnutí, po posunu mapy nebo
-přetočení času zpět se překreslí celý. Tlačítko **Uložit obrázek** stáhne mapu jako PNG s popiskem
+dopravy v kraji (v adrese `#expozice`). Zapnutí spustí přehrávání a síť linek se po dobu expozice nekreslí.
+Obraz se kreslí od chvíle zapnutí, po posunu mapy, změně filtru v legendě nebo
+přetočení času zpět se překreslí celý. Tlačítko **Uložit obrázek** (je vidět jen při zapnuté expozici)
+stáhne mapu jako PNG s popiskem
 (datum a časové rozpětí). V režimu Brno v roce 1953 uložení nejde, letecké snímky export neumožňují.
 
 Tlačítko **Rekordy dne** otevře kartu se zajímavostmi spočítanými z jízdního řádu daného dne:
@@ -39,6 +53,26 @@ vypne). Názvy zastávek jsou v `DATA.stopNames` / `DATA.stopName`.
 Tlačítko **Sdílet** (v liště i na kartě spoje) zkopíruje odkaz na aktuální okamžik: k běžným
 parametrům adresy přidá `cas=HH:MM`, `pohled=lon,lat,zoom` a u vybraného vozidla `spoj=linka@HH:MM`
 (odjezd z výchozí zastávky). Na mobilu se otevře systémové sdílení.
+
+## Parametry adresy
+
+Stav stránky se zapisuje za `#`, parametry se spojují `&`:
+
+| parametr | stav |
+|---|---|
+| `obec=Název` | otevřená karta obce |
+| `dojezd`, `dojezd=Název zastávky` | dojezd do hodiny z obce / ze zastávky (jen spolu s `obec=`) |
+| `1953` | režim Brno v roce 1953 |
+| `bezsite` | vypnutá síť linek |
+| `expozice` | Dlouhá expozice |
+| `rekordy` | karta Rekordy dne |
+| `cas=HH:MM` | čas na mapě, přehrávání se pozastaví |
+| `pohled=lon,lat,zoom` | výřez mapy (zoom pod 2000 = celý kraj) |
+| `spoj=linka@HH:MM` | otevře kartu spoje a sleduje ho |
+
+`cas`, `pohled` a `spoj` jsou jen ve sdíleném odkazu, po načtení je stránka z adresy odstraní.
+Datum v adrese není: odkaz vždy ukazuje jízdní řád dne, na který je stránka právě sestavená,
+takže `spoj=` z jiného dne nemusí nic najít.
 
 ## Klávesnice a textový přehled spojů
 
@@ -59,8 +93,17 @@ z detailu se zaměření vrátí na vybraný spoj. Seznam doplňuje mapu; nezobr
 
 Automatická kontrola klávesnice, hledání, filtrů, stránkování a návratu z detailu
 na desktopu i mobilu: `node tools/check_accessibility.cjs`. Vyžaduje Node.js,
-Playwright a Chromium (volitelně cesta v `CHROMIUM`). Sama spustí dočasný HTTP server,
+Playwright a Chromium (volitelně cesta v `CHROMIUM`). Repozitář nemá `package.json`, Playwright
+musí být nainstalovaný tak, aby ho Node našel (globálně přes `NODE_PATH`). Sama spustí dočasný HTTP server,
 blokuje externí požadavky a uloží snímky do dočasného adresáře. Nemění data stránky.
+
+## Ověření stránky
+
+`node .claude/skills/overeni-stranky/check.mjs [--out složka] [--mobile] [--dark] ["#parametry adresy" …]`
+zkontroluje syntaxi vloženého skriptu (`node --check`), otevře stránku v headless Chromiu bez přístupu
+na internet, pro každý zadaný stav adresy uloží snímek a vypíše chyby z konzole (při chybě končí kódem 1).
+Bez `--out` ukládá snímky do složky `shots/`, která je v `.gitignore`.
+Jiné automatické testy repozitář nemá.
 
 ## Denní aktualizace jízdního řádu (`tools/update_day.sh`)
 
@@ -81,16 +124,26 @@ Skript stáhne GTFS IDS JMK (`https://kordis-jmk.cz/gtfs/gtfs.zip`, stejná data
   první ranní spojení do centra Brna (odjezd od 3:00), nejdelší pauzu mezi odjezdy (5–22 h)
   a poslední spojení z centra domů (odjezd z Hlavního nádraží nebo ÚAN Zvonařka po poledni,
   nejpozději ve 3:00 následujícího rána, s přestupy podle `transfers.txt`).
+  Poslední spojení domů je v datech (`DATA.places`), karta obce ho ale nezobrazuje.
   Když GTFS začíná platit až zadaným dnem (nový feed), chybí v něm předchozí den i noční spoje
   po půlnoci, které IDS JMK vede pod službou následujícího dne. Skript je pak vezme z jízdního
   řádu stejného dne v týdnu o týden později (předchozí noc a spoje dne do 4:00).
 - `tools/build_shapes.py` – přepočítá trasy mezi zastávkami (viz níže).
 
-Celý běh trvá asi půl minuty a nepotřebuje nic mimo standardní Python a `curl`.
-Popisky mapy (`DATA.labels`) se přebírají z předchozí verze stránky.
+Výpočet trvá asi čtvrt minuty, zbytek je stahování podkladů (asi 15 MB). Nepotřebuje nic mimo
+standardní Python a `curl`. Popisky mapy (`DATA.labels`) se přebírají z předchozí verze stránky.
+Stažené podklady jdou do dočasného adresáře, který se po běhu smaže.
 
-Automatické spouštění každé ráno zajišťuje naplánovaný úkol (Routine) v Claude Code:
-spustí `tools/update_day.sh`, výsledek commitne do `main` a GitHub Pages ho zveřejní.
+Skript skončí chybou, když se stahování nepovede, když GTFS není platný zip, když pro zadaný den vyjde
+méně než 1000 spojů nebo když výsledný `index.html` neobsahuje zadané datum. `index.html` se ale
+přepisuje na místě a ve dvou krocích: když běh spadne až při přepočtu tras, zůstane v souboru nový
+jízdní řád se starými trasami. V tom případě soubor vrať (`git checkout index.html`) a spusť skript znovu.
+
+Automatické spouštění zajišťuje naplánovaný úkol (Routine) v Claude Code: každou noc krátce po půlnoci
+(commity „Jízdní řád na …“ vznikají kolem 0:26 Europe/Prague) spustí `tools/update_day.sh`, výsledek
+commitne do `main` a GitHub Pages ho zveřejní. Nastavení úkolu není součástí repozitáře, žádný
+GitHub Actions workflow tu není. Dokud úkol neproběhne, ukazuje stránka jízdní řád předchozího dne
+a tlačítko Teď je skryté.
 
 ## Přepočet tras (`tools/build_shapes.py`)
 
@@ -104,12 +157,23 @@ curl -o transit_routes.geojson "https://services6.arcgis.com/fUWVlHWZNxUvTUh8/ar
 python3 tools/build_shapes.py --html index.html --network ids_jmk_sit.geojson --lines transit_routes.geojson
 ```
 
-Skript nepotřebuje žádné knihovny mimo standardní Python. Kde zastávka leží dál než 200 m
-od sítě nebo cesta nejde najít, zůstane mezi zastávkami rovná čára.
+Skript nepotřebuje žádné knihovny mimo standardní Python. Úseky, po kterých jezdí jen tramvaje,
+se nejdřív hledají v kolejové síti DPMB (`--lines`, přichycení zastávky do 60 m), úseky jen s vlaky
+v železniční síti z téhož souboru (do 150 m), všechno ostatní a to, co se nenašlo, v síti IDS JMK
+(do 200 m, jde změnit přes `--snap`). Kde zastávka leží od sítě dál, cesta nejde najít nebo vyjde
+podezřele dlouhá (víc než trojnásobek vzdušné vzdálenosti + 600 m), zůstane mezi zastávkami rovná čára.
+Další volby: `--rail` (Overpass JSON s kolejemi `railway=rail`, pro vlaky má přednost; denní aktualizace
+ho nepoužívá), `--tol` (zjednodušení tras, výchozí 3 m) a `--dump soubor.json` (výsledek se statistikou).
 
-## Tramvaje 1953 (`tools/build_tram1953.py`)
+## Brno v roce 1953 a tramvaje 1953 (`tools/build_tram1953.py`)
 
-V režimu **Brno v roce 1953** se přes letecké snímky kreslí tramvajová síť z roku 1953 (tlačítko
+Tlačítko **Brno v roce 1953** (v adrese `#1953`) rozdělí mapu svislou čárou: vlevo letecké snímky
+z 50. let, vpravo dnešní letecký snímek nebo po přepnutí **Mapa linek** běžná mapa se sítí linek.
+Čárou se táhne, dnešní vozidla jezdí přes obojí, čas i výřez mapy zůstávají. Tlačítka čtvrtí
+(Lesná, Bohunice, Starý Lískovec, Líšeň, Bystrc, Vinohrady, Centrum, Královo Pole) na ně mapu přiblíží.
+Snímky se načítají za běhu z mapových služeb CENIA (historické) a ČÚZK (dnešní).
+
+V tomto režimu se přes letecké snímky kreslí tramvajová síť z roku 1953 (tlačítko
 **Tramvaje 1953**): bíle tratě, které jezdí dodnes, oranžově tratě později zrušené (Kobližná,
 Dornych, Olomoucká – Černovice, Stránská skála – Líšeň, Židenice, kasárna) a čárkovaně tratě
 postavené až po roce 1953. Data jsou v `index.html` jako řádek `const T53=...`.
@@ -140,10 +204,20 @@ python3 tools/build_tram1953.py --html index.html --lines transit_routes.geojson
 
 Soubor `.nojekyll` říká GitHubu, aby stránku jen zkopíroval a nespouštěl na ní Jekyll.
 
+## Co je v repozitáři
+
+- `index.html` – celá stránka; řádky `const DATA=`, `const SHP=` a `const T53=` jsou vygenerovaná data
+  (dohromady asi 2,5 MB), ručně se needitují
+- `tools/` – `update_day.sh`, `build_data.py`, `build_shapes.py`, `build_tram1953.py` s definicemi
+  v `tram1953.json` a kontrola `check_accessibility.cjs`
+- `CLAUDE.md` a `.claude/skills/` – pokyny pro Claude Code: úpravy stránky (`uprava-stranky`),
+  ověření (`overeni-stranky` se skriptem `check.mjs`) a data (`data-jizdniho-radu`)
+
 ## Zdroje dat
 
 - Jízdní řády: IDS JMK (GTFS, KORDIS JMK / data.brno.cz)
 - Trasy linek: „Trasy linek IDS JMK“ a „Linky městské hromadné dopravy“ (DPMB), data.brno.cz
 - Historická ortofotomapa (50. léta) © CENIA 2010, © GEODIS BRNO 2010; snímky VGHMÚř Dobruška, © MO ČR 2009
 - Ortofoto ČR © ČÚZK, CC BY 4.0
+- Písmo Barlow a Barlow Condensed (Google Fonts)
 - Tramvajová síť 1953: Seznam tramvajových tratí v Brně (Wikipedie, CC BY-SA), zrušené tratě © přispěvatelé OpenStreetMap (ODbL)
